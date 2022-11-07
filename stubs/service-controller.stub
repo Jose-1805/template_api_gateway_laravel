@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Services\$CLASS_NAME$Service;
+use App\Traits\ApiResponser;
+use Illuminate\Http\Request;
+
+class $CLASS_NAME$Controller extends Controller
+{
+    use ApiResponser;
+    /**
+     * Objeto para consumir servicio
+     *
+     * @var $CLASS_NAME$Service
+     */
+    public $$SERVICE_NAME$;
+
+    public function __construct($CLASS_NAME$Service $$SERVICE_NAME$)
+    {
+        $this->$SERVICE_NAME$ = $$SERVICE_NAME$;
+        //$this->middleware('auth:sanctum');
+        //$this->middleware('permission:name')->only(['func']);
+    }
+
+    /**
+     * Lista de elementos del servicio
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $response = $this->$SERVICE_NAME$->get$CLASS_NAME_PLURAL$();
+
+        return $this->generateResponseByService($response);
+    }
+
+    /**
+     * Registro de un nuevo elemento en el servicio
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $response = $this->$SERVICE_NAME$->create$CLASS_NAME$($request->all());
+        return $this->generateResponseByService($response);
+    }
+
+    /**
+     * Obtiene el recurso especificado
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $response = $this->$SERVICE_NAME$->get$CLASS_NAME$($id);
+        return $this->generateResponseByService($response);
+    }
+
+    /**
+     * Actualiza el recurso especificado
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $response = $this->$SERVICE_NAME$->update$CLASS_NAME$($id, $request->all());
+        return $this->generateResponseByService($response);
+    }
+
+    /**
+     * Elimina el recurso especificado
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $response = $this->$SERVICE_NAME$->destroy($id);
+        return $this->generateResponseByService($response);
+    }
+}

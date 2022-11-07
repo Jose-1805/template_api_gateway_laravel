@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Services;
+
+class $CLASS_NAME$Service extends ServiceManager
+{
+    public function __construct()
+    {
+        $this->base_uri = config("services.cluster_services.$SERVICE_NAME$.base_uri");
+    }
+
+    /**
+     * Lista de elementos del servicio
+     *
+     * @return array
+     */
+    public function get$CLASS_NAME_PLURAL$(): array
+    {
+        return $this->performRequest('GET', '$PATH$');
+    }
+
+    /**
+     * Obtiene un elemento especifico del servicio
+     *
+     * @param string $id
+     * @return array
+     */
+    public function get$CLASS_NAME$($id): array
+    {
+        return $this->performRequest('GET', '$PATH$/'.$id);
+    }
+
+    /**
+     * Registro de un nuevo elemento en el servicio
+     *
+     * @param array $data
+     * @return array
+     */
+    public function create$CLASS_NAME$($data): array
+    {
+        return $this->performRequest('POST', '$PATH$', $data);
+    }
+
+    /**
+     * Actualiza el elemento especificado
+     *
+     * @param string $id
+     * @param array $data
+     * @return array
+     */
+    public function update$CLASS_NAME$($id, $data): array
+    {
+        return $this->performRequest('PUT', '$PATH$/'.$id, $data);
+    }
+
+    /**
+     * Elimina el elemento especificado
+     *
+     * @param string $id
+     * @return array
+     */
+    public function destroy($id): array
+    {
+        return $this->performRequest('DELETE', '$PATH$/'.$id);
+    }
+}
