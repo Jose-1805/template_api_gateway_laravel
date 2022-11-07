@@ -31,7 +31,7 @@ Para instalar en un cluster de docker-compose:
         - en el archivo dev_commands.txt asignar el nombre del contenedor agregado en servicio en el campo container
         - en el archivo install.sh y uninstall.sh cambiar el valor del campo app_name por el nombre asignado al nombre 
         de la carpeta del proyecto
-        - en el archivo install.sh y uninstall.sh cambiar la propiedad default_path, por el la ubicación del proyecto
+        - en el archivo install.sh y uninstall.sh cambiar la propiedad default_path, por el la ubicación del proyecto en el contenedor
 
     4. Crear la imagen de los servicios y arrancarlos con los siguientes comandos en el proyecto que almacene el
             archivo docker-compose.yaml:
