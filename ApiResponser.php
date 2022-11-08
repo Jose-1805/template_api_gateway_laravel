@@ -37,7 +37,15 @@ trait ApiResponser
      */
     public function generateResponseByService($data): JsonResponse
     {
-        return $this->generateResponse($data['data'] ?? false ? $data['data'] : $data['error'] ?? ($data["code"] ?? "Error"), $data["code"] ?? 500);
+        if (array_key_exists('data', $data) && array_key_exists('code', $data)) {
+            return $this->generateResponse($data['data'], $data["code"]);
+        } elseif (array_key_exists('error', $data) && array_key_exists('code', $data)) {
+            return $this->generateResponse($data['error'], $data["code"]);
+        } elseif (array_key_exists('error', $data)) {
+            return $this->generateResponse($data['error'], 500);
+        }
+
+        return $this->generateResponse($data, 500);
     }
 
     /**
