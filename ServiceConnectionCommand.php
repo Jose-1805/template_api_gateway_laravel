@@ -270,7 +270,7 @@ class ServiceConnectionCommand extends Command
      */
     public function addEnvironmentVar()
     {
-        file_put_contents(base_path('.env'), strtoupper(Str::of($this->argument('name'))->snake()->value).'_SERVICE_BASE_URL='.$this->getBaseUri(), FILE_APPEND);
+        file_put_contents(base_path('.env'), "\n".strtoupper(Str::of($this->argument('name'))->snake()->value).'_SERVICE_BASE_URL='.$this->getBaseUri(), FILE_APPEND);
     }
 
     /**
@@ -286,7 +286,7 @@ class ServiceConnectionCommand extends Command
         while ($line = fgets($file)) {
             $content .= $line;
             if (str_contains($line, 'cluster_services') && !$is_added) {
-                $content .= "        '".Str::of($this->argument('name'))->snake()->value."' => ['base_uri' => env('".strtoupper(Str::of($this->argument('name'))->snake()->value)."_SERVICE_BASE_URL')],\n";
+                $content .= "        '".$this->getServiceName($this->argument('name'))."' => ['base_uri' => env('".strtoupper(Str::of($this->argument('name'))->snake()->value)."_SERVICE_BASE_URL')],\n";
                 $is_added = true;
             }
         }
