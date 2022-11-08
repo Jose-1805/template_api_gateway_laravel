@@ -15,6 +15,9 @@ find $default_path/ -type d -exec chmod 0777 {} \;
 echo '### composer create-project laravel/laravel:^9.0 /tmp/$app_name'
 composer create-project laravel/laravel /tmp/$app_name
 
+echo '### mv $tmp_path/.* $default_path/'
+mv $tmp_path/.* $default_path/
+
 echo '### mv $tmp_path/* $default_path/'
 mv $tmp_path/* $default_path/
 
