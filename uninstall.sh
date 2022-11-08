@@ -31,8 +31,8 @@ mv $default_path/app/Exceptions/Handler.php $tmp_path/Handler.php
 echo '#### mv $default_path/app/Console/Commands/ServiceConnectionCommand.php $tmp_path/ServiceConnectionCommand.php'
 mv $default_path/app/Console/Commands/ServiceConnectionCommand.php $tmp_path/ServiceConnectionCommand.php
 
-echo '#### mv $default_path/app/Http/Request $tmp_path'
-mv $default_path/app/Http/Request $tmp_path
+echo '#### mv $default_path/app/Http/Requests $tmp_path'
+mv $default_path/app/Http/Requests $tmp_path
 
 echo '#### mv $default_path/config/services.php $tmp_path/services.php'
 mv $default_path/config/services.php $tmp_path/services.php
