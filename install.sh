@@ -90,6 +90,12 @@ rm -r $default_path/database/migrations
 echo '### mv $default_path/migrations/ $default_path/database/'
 mv $default_path/migrations/ $default_path/database/
 
+echo '### rm -r $default_path/database/seeders'
+rm -r $default_path/database/seeders
+
+echo '### mv $default_path/seeders/ $default_path/database/'
+mv $default_path/seeders/ $default_path/database/
+
 echo '### find $default_path/ -type f -exec chmod 0777 {} \;'
 find $default_path/ -type f -exec chmod 0777 {} \;
 
