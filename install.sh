@@ -24,8 +24,11 @@ mv $tmp_path/* $default_path/
 echo '### rm -r $tmp_path/'
 rm -r $tmp_path/
 
-echo '### rm -r $default_path/.git'
-rm -r $default_path/.git
+echo '### rm $default_path/app/Models/User.php'
+rm $default_path/app/Models/User.php
+
+echo '### mv User.php $default_path/app/Models/User.php'
+mv User.php $default_path/app/Models/User.php
 
 echo '### mkdir $default_path/app/Traits'
 mkdir $default_path/app/Traits

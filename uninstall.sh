@@ -19,6 +19,9 @@ mv $default_path/database/migrations $tmp_path/
 echo '#### mv $default_path/database/seeders $tmp_path/'
 mv $default_path/database/seeders $tmp_path/
 
+echo '#### mv $default_path/app/Models/User.php $tmp_path/User.php'
+mv $default_path/app/Models/User.php $tmp_path/User.php
+
 echo '#### mv $default_path/app/Traits/ApiResponser.php $tmp_path/ApiResponser.php'
 mv $default_path/app/Traits/ApiResponser.php $tmp_path/ApiResponser.php
 
