@@ -93,6 +93,9 @@ rm -r $default_path/database/migrations
 echo '### mv $default_path/migrations/ $default_path/database/'
 mv $default_path/migrations/ $default_path/database/
 
+echo '### mv $default_path/Helpers/ $default_path/app/'
+mv $default_path/Helpers/ $default_path/app/
+
 echo '### rm -r $default_path/database/seeders'
 rm -r $default_path/database/seeders
 
