@@ -36,11 +36,17 @@ mkdir $default_path/app/Traits
 echo '### mkdir $default_path/app/Services'
 mkdir $default_path/app/Services
 
+echo '### mv Kernel.php $default_path/app/Http/Kernel.php'
+mv Kernel.php $default_path/app/Http/Kernel.php
+
 echo '### mkdir $default_path/app/Console/Commands'
 mkdir $default_path/app/Console/Commands
 
 echo '### mv ApiResponser.php $default_path/app/Traits/ApiResponser.php'
 mv ApiResponser.php $default_path/app/Traits/ApiResponser.php
+
+echo '### mv AuthenticateAccessMiddleware.php $default_path/app/Http/Middleware/AuthenticateAccessMiddleware.php'
+mv AuthenticateAccessMiddleware.php $default_path/app/Http/Middleware/AuthenticateAccessMiddleware.php
 
 echo '### mv ConsumeExternalService.php $default_path/app/Traits/ConsumeExternalService.php'
 mv ConsumeExternalService.php $default_path/app/Traits/ConsumeExternalService.php

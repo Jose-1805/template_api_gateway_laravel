@@ -7,6 +7,7 @@ class $CLASS_NAME$Service extends ServiceManager
     public function __construct()
     {
         $this->base_uri = config("services.cluster_services.$SERVICE_NAME$.base_uri");
+        $this->access_secret = config("services.cluster_services.$SERVICE_NAME$.access_secret");
     }
 
     /**

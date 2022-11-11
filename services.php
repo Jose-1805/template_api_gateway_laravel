@@ -32,6 +32,7 @@ return [
     ],
 
     'cluster_services' => [
-    ]
+    ],
 
+    'access_secrets' => env('ACCESS_SECRETS', 'PlyxRzUxpm5GG0r3bOOJkufTT9kUnnYj')
 ];

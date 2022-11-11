@@ -12,14 +12,15 @@ trait ConsumeExternalService
      * @param $method
      * @param $requestUrl
      * @param array $formParams
-     * @param array $headers
      * @return array
      */
-    public function performRequest($method, $requestUrl, $formParams = [], $headers = []): array
+    public function performRequest($method, $requestUrl, $formParams = []): array
     {
         $func = strtolower($method);
 
-        $request = Http::baseUrl($this->base_uri);
+        $request = Http::baseUrl($this->base_uri)->withHeaders([
+            'Authorization' => $this->access_secret
+        ]);
 
         $has_file = false;
 
@@ -42,10 +43,6 @@ trait ConsumeExternalService
         }
 
         $response = $request->$func($requestUrl, $formParams);
-
-        /*if (isset($this->secret)) {
-            $headers['Authorization'] = $this->secret;
-        }*/
 
         $data = json_decode($response->body(), true);
 

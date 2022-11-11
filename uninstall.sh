@@ -25,11 +25,17 @@ mv $default_path/database/migrations $tmp_path/
 echo '#### mv $default_path/database/seeders $tmp_path/'
 mv $default_path/database/seeders $tmp_path/
 
+echo '#### mv $default_path/app/Http/Kernel.php $tmp_path/Kernel.php'
+mv $default_path/app/Http/Kernel.php $tmp_path/Kernel.php
+
 echo '#### mv $default_path/app/Models/User.php $tmp_path/User.php'
 mv $default_path/app/Models/User.php $tmp_path/User.php
 
 echo '#### mv $default_path/app/Traits/ApiResponser.php $tmp_path/ApiResponser.php'
 mv $default_path/app/Traits/ApiResponser.php $tmp_path/ApiResponser.php
+
+echo '#### mv $default_path/app/Http/Middleware/AuthenticateAccessMiddleware.php $tmp_path/AuthenticateAccessMiddleware.php'
+mv $default_path/app/Http/Middleware/AuthenticateAccessMiddleware.php $tmp_path/AuthenticateAccessMiddleware.php
 
 echo '#### mv $default_path/app/Traits/ConsumeExternalService.php $tmp_path/ConsumeExternalService.php'
 mv $default_path/app/Traits/ConsumeExternalService.php $tmp_path/ConsumeExternalService.php
