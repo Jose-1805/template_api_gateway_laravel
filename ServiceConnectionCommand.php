@@ -15,7 +15,7 @@ class ServiceConnectionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:service-connection {name} {--P|path=} {--B|base_uri}';
+    protected $signature = 'make:service-connection {name} {--P|path=} {--B|base_uri=}';
 
     /**
      * The console command description.
