@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use Exception;
-use GuzzleHttp\Client;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Http;
 
 trait ConsumeExternalService
 {
@@ -17,24 +17,40 @@ trait ConsumeExternalService
      */
     public function performRequest($method, $requestUrl, $formParams = [], $headers = []): array
     {
-        $client = new Client([
-            'base_uri'  =>  $this->base_uri,
-        ]);
+        $func = strtolower($method);
 
-        if (isset($this->secret)) {
-            $headers['Authorization'] = $this->secret;
+        $request = Http::baseUrl($this->base_uri);
+
+        $has_file = false;
+
+        foreach ($formParams as $key => $value) {
+            if ($value instanceof UploadedFile) {
+                $has_file = true;
+            }
         }
 
-        $response = $client->request($method, $requestUrl, [
-            'form_params' => $formParams,
-            "http_errors" => false,
-            'headers'     => $headers,
-        ]);
+        if ($has_file) {
+            foreach ($formParams as $key => $value) {
+                if ($value instanceof UploadedFile) {
+                    $request = $request->attach($key, $value->get(), $value->getClientOriginalName());
+                }
+            }
+        } else {
+            if ($func != 'get' && $func != 'delete') {
+                $request = $request->asForm();
+            }
+        }
 
-        $data = json_decode($response->getBody()->getContents(), true);
+        $response = $request->$func($requestUrl, $formParams);
+
+        /*if (isset($this->secret)) {
+            $headers['Authorization'] = $this->secret;
+        }*/
+
+        $data = json_decode($response->body(), true);
 
         if ($data == null) {
-            $data = ['error' => strlen($response->getBody()->getContents()) ? $response->getBody()->getContents() : "Error interno del servidor", 'code' => 500];
+            $data = ['error' => strlen($response->body()) ? $response->body() : "Error interno del servidor", 'code' => 500];
         }
 
         return $data;
