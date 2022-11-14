@@ -51,7 +51,7 @@ trait ConsumeExternalService
             if ($isFile && $response->successful()) {
                 return $response->body();
             }
-            $data = ['error' => strlen($response->body()) ? $response->body() : "Error interno del servidor", 'code' => 500];
+            $data = ['error' => config('app.debug') && strlen($response->body()) ? $response->body() : "Error interno del servidor", 'code' => 500];
         }
 
         return $data;
