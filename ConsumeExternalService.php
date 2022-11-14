@@ -12,9 +12,10 @@ trait ConsumeExternalService
      * @param $method
      * @param $requestUrl
      * @param array $formParams
-     * @return array
+     * @param bool $isFile
+     * @return mixed
      */
-    public function performRequest($method, $requestUrl, $formParams = []): array
+    public function performRequest($method, $requestUrl, $formParams = [], $isFile = false): mixed
     {
         $func = strtolower($method);
 
@@ -47,6 +48,9 @@ trait ConsumeExternalService
         $data = json_decode($response->body(), true);
 
         if ($data == null) {
+            if ($isFile && $response->successful()) {
+                return $response->body();
+            }
             $data = ['error' => strlen($response->body()) ? $response->body() : "Error interno del servidor", 'code' => 500];
         }
 
