@@ -49,7 +49,9 @@ trait ConsumeExternalService
 
         if ($data == null) {
             if ($isFile && $response->successful()) {
-                return $response->body();
+                return response()->streamDownload(function () use ($response) {
+                    echo $response->body();
+                }, '', $response->headers());
             }
             $data = ['error' => config('app.debug') && strlen($response->body()) ? $response->body() : "Error interno del servidor", 'code' => 500];
         }
