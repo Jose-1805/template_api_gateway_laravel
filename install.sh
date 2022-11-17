@@ -60,6 +60,9 @@ mv Handler.php $default_path/app/Exceptions/Handler.php
 echo '### mv ServiceConnectionCommand.php $default_path/app/Console/Commands/ServiceConnectionCommand.php'
 mv ServiceConnectionCommand.php $default_path/app/Console/Commands/ServiceConnectionCommand.php
 
+echo '### mv MakeAdmin.php $default_path/app/Console/Commands/MakeAdmin.php'
+mv MakeAdmin.php $default_path/app/Console/Commands/MakeAdmin.php
+
 echo '### mv $default_path/es/ $default_path/lang/'
 mv $default_path/es/ $default_path/lang/
 
@@ -71,6 +74,9 @@ mv services.php $default_path/config/services.php
 
 echo '### mv $default_path/app.php $default_path/config/app.php'
 mv $default_path/app.php $default_path/config/app.php
+
+echo '### mv $default_path/AuthServiceProvider.php $default_path/app/Providers/AuthServiceProvider.php'
+mv $default_path/AuthServiceProvider.php $default_path/app/Providers/AuthServiceProvider.php
 
 echo '### composer require laravel/octane'
 composer require laravel/octane
