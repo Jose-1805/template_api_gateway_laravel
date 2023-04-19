@@ -12,13 +12,11 @@ return new class () extends Migration {
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('background_requests', function (Blueprint $table) {
             $table->uuid("id")->unique()->comment('Identificador único de cada registro');
-            $table->string('name')->comment('Nombre completo del usuario');
-            $table->string('email')->unique()->comment('Correo electrónico del usuario');
-            $table->timestamp('email_verified_at')->nullable()->comment('Fecha de verificación del correo electrónico del usuario');
-            $table->string('password')->nullable()->comment('Contraseña de acceso del usuario');
-            $table->rememberToken()->comment('Token de recordatorio de la sesión del usuario');
+            $table->enum('state', [0,1])->comment('Determina el estado actual de la petición: 0 => Petición en cola, 1 => Petición procesada');
+            $table->text('input_data')->comment('Datos de entrada de la petición (datos serializados)');
+            $table->text('output_data')->nullable()->comment('Datos de salida de la petición (datos serializados)');
             $table->timestamps();
         });
     }

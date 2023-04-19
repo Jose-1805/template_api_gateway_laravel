@@ -5,7 +5,7 @@ namespace App\Traits;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 
-trait ConsumeExternalService
+trait ServiceConsumer
 {
     /**
      * Solicitud http a un servicio del cluster

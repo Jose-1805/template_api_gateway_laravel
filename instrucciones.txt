@@ -4,9 +4,9 @@ Para instalar en un cluster de docker-compose:
     2. Crear o actualizar el archivo de docker-compose.yaml y agregar el servicio o servicios requerido, :
         version: "3"
         services:
-            api-gateway:
-                container_name: api-gateway-container-name
-                image: api-gateway-image-name
+            my_service_name:
+                container_name: container_name
+                image: image_name
                 build:
                     context: /path-to-folder/
                     dockerfile: docker/DockerfileDC
@@ -18,17 +18,17 @@ Para instalar en un cluster de docker-compose:
                     sh -c "/usr/sbin/nginx
                     && supervisord"
 
-            mariadb-api-gateway:
-                container_name: api-gateway-db-container-name
+            db_service_name:
+                container_name: db_container_name
                 image: mariadb:latest
                 ports:
                     - "3306:3306"
-                env_file: enviroment_mariadb_api_gateway.env
+                env_file: enviroment_file.env
                 volumes:
                     - "/path-to-vol-database/:/var/lib/mysql"
 
     3. En los archivos descargados del repositorio realizar los siguientes cambios
-        - en el archivo dev_commands.txt asignar el nombre del contenedor agregado en servicio en el campo container
+        - en el archivo dev_commands.sh asignar el nombre del contenedor agregado en servicio en el campo container
         - en el archivo install.sh y uninstall.sh cambiar el valor del campo app_name por el nombre asignado al nombre
         de la carpeta del proyecto
         - en el archivo install.sh y uninstall.sh cambiar la propiedad default_path, por el la ubicación del proyecto en el contenedor
@@ -37,27 +37,30 @@ Para instalar en un cluster de docker-compose:
             archivo docker-compose.yaml:
         - docker-compose up -d
 
-    5. Copiar todo el contenido del archivo dev_commands.txt del repositorio descargado y pegarlo en una consola
+    5. Ejecutar o copiar todo el contenido del archivo dev_commands.sh del repositorio descargado y pegarlo en una consola
+        para tener los alias de los comandos de acceso al contenedor
 
     6. Ejecutar en la consola el comando:
         - install_app
+
+    7. Realice las configuraciones recomendadas después de ejecutar "install_app"
+
     8. Dentro de la carpeta que contiene el archivo docker-compose.yaml ejecutar el siguiente comando para que octane se inicie
         - docker-compose restart
 
-    9. Configure los datos de conexión a la base de datos en el archivo .env
-    10. En la consola donde pegó la lista de comandos ejecute el comando "migrate"
+    9. En la consola que instaló la lista comandos ejecute el comando "artisan migrate"
 
 Para instalar modo local:
     1. Cambiar el nombre de la carpeta del proyecto por el nombre deseado utilizando minúsculas y guiones bajos "api_gateway"
     2. Cambiar en install.sh y uninstall.sh la propiedad app_name, por el nombre asignado a la carpeta del proyecto
     3. Cambiar en install.sh y uninstall.sh la propiedad default_path, por el la ubicación del proyecto
     4. Ejecutar el archivo install.sh ejecutando el comando "./install.sh" en la raíz del proyecto
-    5. Configure la conexión a base de datos y lo que sea requerido en el archivo .env
+    5. Realice las configuraciones recomendadas después de ejecutar el comando anterior
     6. Ejecute la migración de la base de datos con el comando "php artisan migrate" en la raíz del proyecto
 
 Para crear la configuración de un servicio nuevo
     1. Ejecute el comando "php artisan make:service-connection Name", el comando creará todos los recursos
     necesarios para conectarse al servicio Name, el comando crea variables y cadenas de configuración de acuerdo
-    al nombre asignado, para personalizar las variable puede ejecutar el comando con los parámetros opcionales:
+    al nombre asignado, para personalizar las variables puede ejecutar el comando con los parámetros opcionales:
     "php artisan make:service-connection Name --path=/example/path --base_uri=http://example-uri"
     Ejemplo "php artisan make:service-connection MdOrder --path=/api/order --base_uri=http://md-order-service"

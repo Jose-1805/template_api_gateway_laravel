@@ -48,9 +48,12 @@ class ServiceConnectionCommand extends Command
      */
     public function handle()
     {
+        // Ruta de almacenamiento del servicio con nombre completo
         $path_service = base_path('app/Services')."/".$this->getClassName($this->argument('name')) . 'Service.php';
+        // Ruta de almacenamiento del controlador con nombre completo
         $path_controller = base_path('app/Http/Controllers') .'/' .$this->getClassName($this->argument('name')) . 'Controller.php';
 
+        // No existe ningún servicio o controlador con el nombre solicitado
         if (!$this->files->exists($path_service) && !$this->files->exists($path_controller)) {
             $this->comment('Creando servicio ...');
             $path_stub_service = __DIR__ . '/../../../stubs/service.stub';
@@ -198,24 +201,57 @@ class ServiceConnectionCommand extends Command
     }
 
     /**
-     * Agrega la configuración del servicio en el archivos config/services.php
+     * Agrega la configuración del servicio en el archivo config/services.php
      *
      * @return void
      */
-    public function addServiceConfig()
+    public function addServiceConfig($add_key = false, $line_number = 0)
     {
         $file = fopen(base_path('config/services.php'), 'r+') or die('Error');
+
+        // Determina si se logró registrar la configuración
         $is_added = false;
+
+        // Nuevo contenido del archivo
         $content = "";
+
+        // Almacena el número de línea actual del archivo
+        $line_number_counter = 1;
+
+        // Línea donde se debe almacenar la llave cluster_services si no se ha agregado
+        $line_to_add_key = 0;
+
         while ($line = fgets($file)) {
             $content .= $line;
-            if (str_contains($line, 'cluster_services') && !$is_added) {
-                $content .= "        '".$this->getServiceName($this->argument('name'))."' => ['base_uri' => env('".strtoupper(Str::of($this->argument('name'))->snake()->value)."_SERVICE_BASE_URL'), 'access_secret' => env('".strtoupper(Str::of($this->argument('name'))->snake()->value)."_SERVICE_ACCESS_SECRET')],\n";
-                $is_added = true;
+
+            // La línea que contiene ]; determina el cierre del array de configuración
+            if(str_contains($line, '];')) {
+                $line_to_add_key = $line_number_counter-1;
             }
+
+            // Si la función se llama para almacenar el key cluster_services
+            if($add_key) {
+                if($line_number_counter == $line_number) {
+                    $content .= "    'cluster_services' => [\n    ],\n";
+                    $is_added = true;
+                }
+            } else {
+                if (str_contains($line, 'cluster_services') && !$is_added) {
+                    $content .= "        '".$this->getServiceName($this->argument('name'))."' => ['base_uri' => env('".strtoupper(Str::of($this->argument('name'))->snake()->value)."_SERVICE_BASE_URL'), 'access_secret' => env('".strtoupper(Str::of($this->argument('name'))->snake()->value)."_SERVICE_ACCESS_SECRET')],\n";
+                    $is_added = true;
+                }
+            }
+            $line_number_counter++;
         }
+
         rewind($file);
         fwrite($file, $content);
         fclose($file);
+
+        // No se logra configurar el servicio porque no existe el key cluster_services
+        if(!$is_added) {
+            $this->addServiceConfig(true, $line_to_add_key);
+            $this->addServiceConfig();
+        }
     }
 }

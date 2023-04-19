@@ -1,0 +1,10 @@
+container=container_name
+alias install_app="docker exec -it $container sh ./install.sh"
+alias uninstall_app="docker exec -it $container sh ./uninstall.sh"
+alias artisan="docker exec -it $container php artisan"
+alias make_resource="docker exec -it $container sh ./docker/commands/make_resource.sh"
+alias dev_files_permissions="docker exec -it $container sh ./docker/commands/dev_files_permissions.sh"
+alias dev_dir_permissions="docker exec -it $container sh ./docker/commands/dev_dir_permissions.sh"
+alias prod_files_permissions="docker exec -it $container find ./ -type f -exec chmod 0644 {} \;"
+alias prod_dir_permissions="docker exec -it $container find ./ -type d -exec chmod 0755 {} \;"
+alias connect_console="docker exec -it $container /bin/sh"
