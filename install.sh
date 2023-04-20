@@ -71,6 +71,10 @@ echo '# Creación de migraciones requeridas ...'
 rm -r $default_path/database/migrations
 mv $default_path/migrations/ $default_path/database/
 
+echo '# Creación de seeders ...'
+rm -r $default_path/database/seeders
+mv $default_path/seeders/ $default_path/database/
+
 echo '# Creando StubFormatter.php para crear clases de objetos laravel dinámicamente ...'
 mv $default_path/Helpers $default_path/app/
 

@@ -14,6 +14,7 @@ mv $default_path/lang/es $tmp_path/
 mv $default_path/app/Helpers $tmp_path/
 mv $default_path/stubs $tmp_path/
 mv $default_path/database/migrations $tmp_path/
+mv $default_path/database/seeders $tmp_path/
 mv $default_path/app/Traits/ApiResponser.php $tmp_path/ApiResponser.php
 mv $default_path/app/Traits/ServiceConsumer.php $tmp_path/ServiceConsumer.php
 mv $default_path/app/Traits/JsonRequestConverter.php $tmp_path/JsonRequestConverter.php
