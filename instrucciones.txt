@@ -48,8 +48,6 @@ Para instalar en un cluster de docker-compose:
     8. Dentro de la carpeta que contiene el archivo docker-compose.yaml ejecutar el siguiente comando para que octane se inicie
         - docker-compose restart
 
-    9. En la consola que instaló la lista comandos ejecute el comando "artisan migrate"
-
 Para instalar modo local:
     1. Cambiar el nombre de la carpeta del proyecto por el nombre deseado utilizando minúsculas y guiones bajos "api_gateway"
     2. Cambiar en install.sh y uninstall.sh la propiedad app_name, por el nombre asignado a la carpeta del proyecto

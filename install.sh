@@ -20,11 +20,9 @@ mv $tmp_path/* $default_path/
 echo '# Eliminando ruta temporal ...'
 rm -r $tmp_path/
 
-echo '# Eliminando modelo de usuario User.php ...'
-rm $default_path/app/Models/User.php
-
-echo '# Creando modelo para peticiones en segundo plano ...'
-mv BackgroundRequest.php $default_path/app/Models/BackgroundRequest.php
+echo '# Eliminando y remplazando modelos ...'
+rm -r $default_path/app/Models
+mv $default_path/Models/ $default_path/app/
 
 echo '# Creando directorio para almacenamiento de Traits ...'
 mkdir $default_path/app/Traits
@@ -50,11 +48,11 @@ mkdir $default_path/app/Console/Commands
 echo '# Creando comando para la generación de recursos y configuraciones de conexión a servicios ...'
 mv ServiceConnectionCommand.php $default_path/app/Console/Commands/ServiceConnectionCommand.php
 
-echo '# Creando middleware de autenticación de solicitudes al API GATEWAY ...'
-mv AuthenticateAccessMiddleware.php $default_path/app/Http/Middleware/AuthenticateAccessMiddleware.php
-
 echo '# Creando manejador de excepciones del sistema ...'
 mv Handler.php $default_path/app/Exceptions/Handler.php
+
+echo '# Creando controlador de autenticación ...'
+mv AuthenticationController.php.php $default_path/app/Http/Controllers/AuthenticationController.php.php
 
 echo '# Publicando archivos de internacionalización ...'
 php artisan lang:publish
@@ -69,12 +67,23 @@ printf '0\nyes' | php artisan octane:install
 # Permisos de ejecución para el archivo rr
 chmod +x $default_path/rr
 
-echo '# Creación de migración para tabla de peticiones en segundo plano ...'
+echo '# Creación de migraciones requeridas ...'
 rm -r $default_path/database/migrations
 mv $default_path/migrations/ $default_path/database/
 
 echo '# Creando StubFormatter.php para crear clases de objetos laravel dinámicamente ...'
 mv $default_path/Helpers $default_path/app/
+
+echo '# Instalando laravel sanctum'
+composer require laravel/sanctum
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+
+echo '# Instalando laravel-permission para control de role sy permisos'
+composer require spatie/laravel-permission
+
+echo '# Instalando rutas iniciales ...'
+rm $default_path/routes/api.php
+mv api.php $default_path/routes/api.php
 
 echo '# Asignando permisos de edición al proyecto'
 sh ./docker/commands/dev_files_permissions.sh
@@ -82,7 +91,9 @@ sh ./docker/commands/dev_dir_permissions.sh
 
 echo '# Api Gateway instalado con éxito. Realice las siguientes configuraciones para terminar.'
 echo ''
-echo '1. Agregue el valor \App\Http\Middleware\AuthenticateAccessMiddleware::class en app\Http\Kernel.php en la variable $middleware'
-echo '2. Agregue la clave access_secrets con el valor env("ACCESS_SECRETS") en config\services.php'
+echo '1. Si va a utilizar autenticación para un SPA debe habilitar o agregar el siguiente middleware en la clave api del archivo app\Http\Kernel.php: \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,'
+echo '2. Configure el modelo User.php y su respectiva migración si requiere campos adicionales en la tabla de usuarios'
 echo '3. Configure su archivo .env'
-echo '4. Ejecute php artisan migrate en el contenedor o artisan migrate si configuró comandos para acceso añ contenedor'
+echo '4. Ejecute php artisan migrate en el contenedor o artisan migrate si configuró comandos para acceso al contenedor'
+echo '5. Configure el Sedder de roles y permisos RolesAndPermissionsSeeder.php de acuerdo a los módulos y privilegios de su sistema'
+echo '6. Ejecute php artisan db:seed en el contenedor o artisan db:seed si configuró comandos para acceso al contenedor'

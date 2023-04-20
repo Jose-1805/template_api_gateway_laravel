@@ -2,6 +2,7 @@ container=container_name
 alias install_app="docker exec -it $container sh ./install.sh"
 alias uninstall_app="docker exec -it $container sh ./uninstall.sh"
 alias artisan="docker exec -it $container php artisan"
+alias composer_container="docker exec -it $container composer"
 alias make_resource="docker exec -it $container sh ./docker/commands/make_resource.sh"
 alias dev_files_permissions="docker exec -it $container sh ./docker/commands/dev_files_permissions.sh"
 alias dev_dir_permissions="docker exec -it $container sh ./docker/commands/dev_dir_permissions.sh"
