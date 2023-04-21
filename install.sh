@@ -52,7 +52,7 @@ echo '# Creando manejador de excepciones del sistema ...'
 mv Handler.php $default_path/app/Exceptions/Handler.php
 
 echo '# Creando controlador de autenticación ...'
-mv AuthenticationController.php.php $default_path/app/Http/Controllers/AuthenticationController.php.php
+mv AuthenticationController.php $default_path/app/Http/Controllers/AuthenticationController.php
 
 echo '# Publicando archivos de internacionalización ...'
 php artisan lang:publish
@@ -98,6 +98,7 @@ echo ''
 echo '1. Si va a utilizar autenticación para un SPA debe habilitar o agregar el siguiente middleware en la clave api del archivo app\Http\Kernel.php: \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,'
 echo '2. Configure el modelo User.php y su respectiva migración si requiere campos adicionales en la tabla de usuarios'
 echo '3. Configure su archivo .env'
-echo '4. Ejecute php artisan migrate en el contenedor o artisan migrate si configuró comandos para acceso al contenedor'
-echo '5. Configure el Sedder de roles y permisos RolesAndPermissionsSeeder.php de acuerdo a los módulos y privilegios de su sistema'
-echo '6. Ejecute php artisan db:seed en el contenedor o artisan db:seed si configuró comandos para acceso al contenedor'
+echo '4. En la migración de personal access tokens cambie $table->morphs("tokenable"); por $table->uuidMorphs("tokenable");'
+echo '5. Ejecute php artisan migrate en el contenedor o artisan migrate si configuró comandos para acceso al contenedor'
+echo '6. Configure el Sedder de roles y permisos RolesAndPermissionsSeeder.php de acuerdo a los módulos y privilegios de su sistema'
+echo '7. Ejecute php artisan db:seed en el contenedor o artisan db:seed si configuró comandos para acceso al contenedor'

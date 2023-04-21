@@ -33,7 +33,7 @@ class User extends Model
     /**
      * Lista de tokens asociados al usuario
      */
-    public function tokens()
+    public function otherTokens()
     {
         return $this->hasMany(Token::class);
     }
