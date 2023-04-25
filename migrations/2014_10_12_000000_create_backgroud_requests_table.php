@@ -17,6 +17,7 @@ return new class () extends Migration {
             $table->enum('state', [0,1])->comment('Determina el estado actual de la petición: 0 => Petición en cola, 1 => Petición procesada');
             $table->text('input_data')->comment('Datos de entrada de la petición (datos serializados)');
             $table->text('output_data')->nullable()->comment('Datos de salida de la petición (datos serializados)');
+            $table->uuid("user_id")->nullable()->comment('Relación al usuario asociado a la orden');
             $table->timestamps();
         });
     }

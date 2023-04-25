@@ -49,7 +49,7 @@ class AuthenticationController extends Controller
                 ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        return $this->httpOkResponse(["token" => $user->createToken($request->device_name)->plainTextToken]);
+        return $this->httpOkResponse(["token" => $user->createToken($request->device_name)->plainTextToken, "user" => $user]);
 
     }
 }
