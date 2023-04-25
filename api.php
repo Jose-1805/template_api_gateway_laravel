@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Models\BackgroundRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +18,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/logout', [AuthenticationController::class, "logoutToken"]);
 Route::post('/token', [AuthenticationController::class, "token"]);
+Route::get('/user-data', [AuthenticationController::class, "authUserData"]);

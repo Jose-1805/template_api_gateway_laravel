@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Traits\ApiResponser;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +15,7 @@ class AuthenticationController extends Controller
 
     public function __construct()
     {
-        $this->middleware("auth:sanctum")->only(["logoutToken"]);
+        $this->middleware("auth:sanctum")->only(["logoutToken", "authUserData"]);
     }
 
     /**
@@ -50,6 +51,15 @@ class AuthenticationController extends Controller
         }
 
         return $this->httpOkResponse(["token" => $user->createToken($request->device_name)->plainTextToken, "user" => $user]);
+    }
 
+    /**
+     * Datos del usuario autenticado
+     *
+     * @param Request $request
+     */
+    public function authUserData(Request $request): JsonResponse
+    {
+        return $this->httpOkResponse($request->user());
     }
 }
