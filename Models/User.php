@@ -45,4 +45,16 @@ class User extends Model
     {
         return $this->hasMany(BackgroundRequest::class);
     }
+
+    /**
+     * Información completa del usuario
+     *
+     * @return void
+     */
+    public function allData(): User
+    {
+        $this->role_data = $this->roles()->select("roles.id", "roles.name")->with("permissions:id,name")->get();
+        $this->permissions;
+        return $this;
+    }
 }
