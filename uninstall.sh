@@ -15,14 +15,12 @@ mv $default_path/app/Helpers $tmp_path/
 mv $default_path/stubs $tmp_path/
 mv $default_path/database/migrations $tmp_path/
 mv $default_path/database/seeders $tmp_path/
-mv $default_path/app/Traits/ApiResponser.php $tmp_path/ApiResponser.php
-mv $default_path/app/Traits/ServiceConsumer.php $tmp_path/ServiceConsumer.php
-mv $default_path/app/Traits/JsonRequestConverter.php $tmp_path/JsonRequestConverter.php
 mv $default_path/app/Services/ServiceManager.php $tmp_path/ServiceManager.php
 mv $default_path/app/Exceptions/Handler.php $tmp_path/Handler.php
 mv $default_path/app/Http/Controllers/AuthenticationController.php $tmp_path/AuthenticationController.php
 mv $default_path/routes/api.php $tmp_path/api.php
 mv $default_path/app/Models/ $tmp_path/
+mv $default_path/app/Traits/ $tmp_path/
 mv $default_path/app/Console/Commands/ServiceConnectionCommand.php $tmp_path/ServiceConnectionCommand.php
 mv $default_path/dev_commands.sh $tmp_path/dev_commands.sh
 mv $default_path/instrucciones.txt $tmp_path/instrucciones.txt

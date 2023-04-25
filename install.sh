@@ -24,17 +24,9 @@ echo '# Eliminando y remplazando modelos ...'
 rm -r $default_path/app/Models
 mv $default_path/Models/ $default_path/app/
 
-echo '# Creando directorio para almacenamiento de Traits ...'
+echo '# Creando Traits ...'
 mkdir $default_path/app/Traits
-
-echo '# Creando Trait de estandarización de respuestas ...'
-mv ApiResponser.php $default_path/app/Traits/ApiResponser.php
-
-echo '# Creando Trait para consumir servicios desde el API GATEWAY ...'
-mv ServiceConsumer.php $default_path/app/Traits/ServiceConsumer.php
-
-echo '# Creando Trait para serializar requests ...'
-mv JsonRequestConverter.php $default_path/app/Traits/JsonRequestConverter.php
+mv $default_path/Traits/ $default_path/app/
 
 echo '# Creando directorio para almacenamiento de servicios ...'
 mkdir $default_path/app/Services
