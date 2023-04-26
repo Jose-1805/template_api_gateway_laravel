@@ -60,6 +60,6 @@ class AuthenticationController extends Controller
      */
     public function authUserData(Request $request): JsonResponse
     {
-        return $this->httpOkResponse($request->user());
+        return $this->httpOkResponse($request->user()->allData());
     }
 }
