@@ -18,6 +18,6 @@ class Service extends Model
         'name',
         'base_uri',
         'path',
-        'access_secret'
+        'access_token'
     ];
 }

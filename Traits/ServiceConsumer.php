@@ -20,7 +20,7 @@ trait ServiceConsumer
         $func = strtolower($method);
 
         $request = Http::baseUrl($this->base_uri)->withHeaders([
-            'Authorization' => $this->access_secret
+            'Authorization' => $this->access_token
         ]);
 
         $has_file = false;

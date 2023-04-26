@@ -16,7 +16,7 @@ class ServiceConnectionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:service-connection {name} {base_uri} {access_secret} {--P|path=}';
+    protected $signature = 'make:service-connection {name} {base_uri} {access_token} {--P|path=}';
 
     /**
      * The console command description.
@@ -173,7 +173,7 @@ class ServiceConnectionCommand extends Command
             "name" => Str::of($this->argument('name'))->snake()->value,
             "base_uri" => $this->argument('base_uri'),
             "path" => $this->getPath(),
-            "access_secret" => $this->argument('access_secret'),
+            "access_token" => $this->argument('access_token'),
         ]);
         return $service->createToken("services")->plainTextToken;
     }

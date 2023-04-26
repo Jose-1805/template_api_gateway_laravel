@@ -17,7 +17,7 @@ return new class () extends Migration {
             $table->text('name', 100)->unique()->comment('Nombre del micro servicio registrado');
             $table->text('base_uri', 250)->comment('Url base para conectarse al servicio');
             $table->text('path', 100)->comment('Path base para acceder a las funciones básicas CRUD del servicio');
-            $table->text('access_secret', 250)->comment('Secreto para poder acceder a las funciones del servicio');
+            $table->text('access_token', 250)->comment('Token para poder acceder a las funciones del servicio');
             $table->timestamps();
         });
     }
