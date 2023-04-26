@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Http;
 
 trait ServiceConsumer
 {
+    // Usuario logueado al realizar la petición
+    public $user_id = null;
+
     /**
      * Solicitud http a un servicio del cluster
      * @param $method
@@ -20,7 +23,8 @@ trait ServiceConsumer
         $func = strtolower($method);
 
         $request = Http::baseUrl($this->base_uri)->withHeaders([
-            'Authorization' => $this->access_token
+            'Authorization' => $this->access_token,
+            'user_id' => $this->user_id
         ]);
 
         $has_file = false;
