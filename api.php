@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
-use App\Models\BackgroundRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
