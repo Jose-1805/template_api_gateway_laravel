@@ -31,9 +31,6 @@ mv $default_path/Traits/ $default_path/app/
 echo '# Creando directorio para almacenamiento de servicios ...'
 mkdir $default_path/app/Services
 
-echo '# Creando clase base para nuevas clases de administración y/o conexión a servicios'
-mv ServiceManager.php $default_path/app/Services/ServiceManager.php
-
 echo '# Creando directorio para almacenamiento de comandos ...'
 mkdir $default_path/app/Console/Commands
 

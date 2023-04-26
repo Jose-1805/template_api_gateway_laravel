@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\$CLASS_NAME$Service;
+use App\Models\Service;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 
 class $CLASS_NAME$Controller extends Controller
 {
     use ApiResponser;
+
     /**
      * Objeto para consumir servicio
      *
-     * @var $CLASS_NAME$Service
+     * @var Service
      */
     public $$SERVICE_NAME$;
 
-    public function __construct($CLASS_NAME$Service $$SERVICE_NAME$)
+    public function __construct()
     {
-        $this->$SERVICE_NAME$ = $$SERVICE_NAME$;
+        $this->$SERVICE_NAME$ = Service::where('name', '$SERVICE_NAME_SNAKE$')->first();
         // EL middleware auth_access permite el acceso con validación de autorización a las rutas
         //$this->middleware('auth_access');
         //$this->middleware('auth:sanctum');
@@ -32,7 +33,7 @@ class $CLASS_NAME$Controller extends Controller
      */
     public function index()
     {
-        $response = $this->$SERVICE_NAME$->get$CLASS_NAME_PLURAL$();
+        $response = $this->$SERVICE_NAME$->getElements();
 
         return $this->generateResponseByService($response);
     }
@@ -45,7 +46,7 @@ class $CLASS_NAME$Controller extends Controller
      */
     public function store(Request $request)
     {
-        $response = $this->$SERVICE_NAME$->create$CLASS_NAME$($request->all());
+        $response = $this->$SERVICE_NAME$->createElement($request->all());
         return $this->generateResponseByService($response);
     }
 
@@ -57,7 +58,7 @@ class $CLASS_NAME$Controller extends Controller
      */
     public function show($id)
     {
-        $response = $this->$SERVICE_NAME$->get$CLASS_NAME$($id);
+        $response = $this->$SERVICE_NAME$->getElement($id);
         return $this->generateResponseByService($response);
     }
 
@@ -70,7 +71,7 @@ class $CLASS_NAME$Controller extends Controller
      */
     public function update(Request $request, $id)
     {
-        $response = $this->$SERVICE_NAME$->update$CLASS_NAME$($id, $request->all());
+        $response = $this->$SERVICE_NAME$->updateElement($id, $request->all());
         return $this->generateResponseByService($response);
     }
 

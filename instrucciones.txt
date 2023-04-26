@@ -57,8 +57,10 @@ Para instalar modo local:
     6. Ejecute la migración de la base de datos con el comando "php artisan migrate" en la raíz del proyecto
 
 Para crear la configuración de un servicio nuevo
-    1. Ejecute el comando "php artisan make:service-connection Name", el comando creará todos los recursos
-    necesarios para conectarse al servicio Name, el comando crea variables y cadenas de configuración de acuerdo
+    1. Primero cree el código base y la instalación del servicio para obtener un access_code para las
+    solicitudes desde al api_gateway al servicio
+    2. Ejecute el comando "php artisan make:service-connection Name BaseUri AccessSecret", el comando creará todos los recursos
+    necesarios para conectarse al servicio Name, el comando crea registros de configuración de acuerdo
     al nombre asignado, para personalizar las variables puede ejecutar el comando con los parámetros opcionales:
-    "php artisan make:service-connection Name --path=/example/path --base_uri=http://example-uri"
-    Ejemplo "php artisan make:service-connection MdOrder --path=/api/order --base_uri=http://md-order-service"
+    "php artisan make:service-connection Name BaseUri AccessSecret --path=/example/path"
+    Ejemplo "php artisan make:service-connection Contact http://contact_service sf2sd1f3sd21fs --path=/api/contact"

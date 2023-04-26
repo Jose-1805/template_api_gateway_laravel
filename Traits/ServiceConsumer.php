@@ -58,4 +58,59 @@ trait ServiceConsumer
 
         return $data;
     }
+
+    /**
+     * Lista de elementos del servicio
+     *
+     * @return array
+     */
+    public function getElements(): array
+    {
+        return $this->performRequest('GET', $this->path);
+    }
+
+    /**
+     * Obtiene un elemento especifico del servicio
+     *
+     * @param string $id
+     * @return array
+     */
+    public function getElement($id): array
+    {
+        return $this->performRequest('GET', $this->path.'/'.$id);
+    }
+
+    /**
+     * Registro de un nuevo elemento en el servicio
+     *
+     * @param array $data
+     * @return array
+     */
+    public function createElement($data): array
+    {
+        return $this->performRequest('POST', $this->path, $data);
+    }
+
+    /**
+     * Actualiza el elemento especificado
+     *
+     * @param string $id
+     * @param array $data
+     * @return array
+     */
+    public function updateElement($id, $data): array
+    {
+        return $this->performRequest('PUT', $this->path.'/'.$id, $data);
+    }
+
+    /**
+     * Elimina el elemento especificado
+     *
+     * @param string $id
+     * @return array
+     */
+    public function destroyElement($id): array
+    {
+        return $this->performRequest('DELETE', $this->path.'/'.$id);
+    }
 }

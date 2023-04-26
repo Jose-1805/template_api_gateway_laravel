@@ -15,7 +15,6 @@ mv $default_path/app/Helpers $tmp_path/
 mv $default_path/stubs $tmp_path/
 mv $default_path/database/migrations $tmp_path/
 mv $default_path/database/seeders $tmp_path/
-mv $default_path/app/Services/ServiceManager.php $tmp_path/ServiceManager.php
 mv $default_path/app/Exceptions/Handler.php $tmp_path/Handler.php
 mv $default_path/app/Http/Controllers/AuthenticationController.php $tmp_path/AuthenticationController.php
 mv $default_path/routes/api.php $tmp_path/api.php

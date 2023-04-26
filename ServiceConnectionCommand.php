@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Helpers\StubFormatter;
+use App\Models\Service;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
@@ -15,7 +16,7 @@ class ServiceConnectionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:service-connection {name} {--P|path=} {--B|base_uri=}';
+    protected $signature = 'make:service-connection {name} {base_uri} {access_secret} {--P|path=}';
 
     /**
      * The console command description.
@@ -54,18 +55,7 @@ class ServiceConnectionCommand extends Command
         $path_controller = base_path('app/Http/Controllers') .'/' .$this->getClassName($this->argument('name')) . 'Controller.php';
 
         // No existe ningún servicio o controlador con el nombre solicitado
-        if (!$this->files->exists($path_service) && !$this->files->exists($path_controller)) {
-            $this->comment('Creando servicio ...');
-            $path_stub_service = __DIR__ . '/../../../stubs/service.stub';
-            $formatter_service = new StubFormatter(
-                $path_service,
-                $this->getStubVariables(),
-                $path_stub_service,
-                $this->files
-            );
-            $formatter_service->make();
-            $this->info('Servicio creado con éxito');
-
+        if (!$this->files->exists($path_service) && !$this->files->exists($path_controller) && !Service::where("name", strtolower(Str::of($this->argument('name'))->snake()->value))->count()) {
             $this->comment('Creando controlador ...');
             $path_stub_controller = __DIR__ . '/../../../stubs/service-controller.stub';
             $formatter_controller = new StubFormatter(
@@ -81,10 +71,8 @@ class ServiceConnectionCommand extends Command
             $this->addRoute($this->getClassName($this->argument('name')) . 'Controller', $this->getRoute());
             $this->info('Rutas agregadas con éxito');
 
-            $this->comment('Asignando variables de entorno ...');
-            $this->addEnvironmentVar();
-            $this->addServiceConfig();
-            $this->info('Variables agregadas con éxito');
+            $this->comment('Creando servicio en base de datos ...');
+            $this->info("Servicio creado, guarde de forma segura el siguiente token de acceso en el servicio: ".$this->addServiceToDatabase());
         } else {
             $this->error('Ya existe un servicio o controlador con el nombre sugerido "'.$this->argument('name').'"');
         }
@@ -137,20 +125,6 @@ class ServiceConnectionCommand extends Command
     }
 
     /**
-     * Obtiene url base para conectarse al servicio
-     *
-     * @return string
-     */
-    public function getBaseUri(): string
-    {
-        if ($this->option('base_uri')) {
-            return $this->option('base_uri');
-        } else {
-            return 'http://'.Str::slug($this->getServiceName($this->argument('name')));
-        }
-    }
-
-    /**
      * Map the stub variables present in stub to its value
      *
      * @return array
@@ -162,7 +136,8 @@ class ServiceConnectionCommand extends Command
             'CLASS_NAME' => $this->getClassName($this->argument('name')),
             'SERVICE_NAME' => $this->getServiceName($this->argument('name')),
             'CLASS_NAME_PLURAL' => Pluralizer::plural($this->getClassName($this->argument('name'))) ,
-            'PATH' => $this->getPath()
+            'PATH' => $this->getPath(),
+            'SERVICE_NAME_SNAKE' => Str::of($this->argument('name'))->snake()->value,
         ];
     }
 
@@ -171,7 +146,7 @@ class ServiceConnectionCommand extends Command
      *
      * @return void
      */
-    public static function addRoute($controller_name, $route_name)
+    public function addRoute($controller_name, $route_name)
     {
         $file = fopen(base_path('routes/api.php'), 'r+') or die('Error');
         $use_is_added = false;
@@ -190,68 +165,16 @@ class ServiceConnectionCommand extends Command
     }
 
     /**
-     * Asigna el valor de base_uri en el archivo de configuración de variables de entorno
-     *
-     * @return void
+     * Agrega la información del servicio a la base de datos con token de acceso
      */
-    public function addEnvironmentVar()
+    public function addServiceToDatabase(): string
     {
-        file_put_contents(base_path('.env'), "\n".strtoupper(Str::of($this->argument('name'))->snake()->value).'_SERVICE_BASE_URL='.$this->getBaseUri(), FILE_APPEND);
-        file_put_contents(base_path('.env'), "\n".strtoupper(Str::of($this->argument('name'))->snake()->value).'_SERVICE_ACCESS_SECRET=n5IZ4MFPx61PsIud15Mmi3Gda3cDQdJ5', FILE_APPEND);
-    }
-
-    /**
-     * Agrega la configuración del servicio en el archivo config/services.php
-     *
-     * @return void
-     */
-    public function addServiceConfig($add_key = false, $line_number = 0)
-    {
-        $file = fopen(base_path('config/services.php'), 'r+') or die('Error');
-
-        // Determina si se logró registrar la configuración
-        $is_added = false;
-
-        // Nuevo contenido del archivo
-        $content = "";
-
-        // Almacena el número de línea actual del archivo
-        $line_number_counter = 1;
-
-        // Línea donde se debe almacenar la llave cluster_services si no se ha agregado
-        $line_to_add_key = 0;
-
-        while ($line = fgets($file)) {
-            $content .= $line;
-
-            // La línea que contiene ]; determina el cierre del array de configuración
-            if(str_contains($line, '];')) {
-                $line_to_add_key = $line_number_counter-1;
-            }
-
-            // Si la función se llama para almacenar el key cluster_services
-            if($add_key) {
-                if($line_number_counter == $line_number) {
-                    $content .= "    'cluster_services' => [\n    ],\n";
-                    $is_added = true;
-                }
-            } else {
-                if (str_contains($line, 'cluster_services') && !$is_added) {
-                    $content .= "        '".$this->getServiceName($this->argument('name'))."' => ['base_uri' => env('".strtoupper(Str::of($this->argument('name'))->snake()->value)."_SERVICE_BASE_URL'), 'access_secret' => env('".strtoupper(Str::of($this->argument('name'))->snake()->value)."_SERVICE_ACCESS_SECRET')],\n";
-                    $is_added = true;
-                }
-            }
-            $line_number_counter++;
-        }
-
-        rewind($file);
-        fwrite($file, $content);
-        fclose($file);
-
-        // No se logra configurar el servicio porque no existe el key cluster_services
-        if(!$is_added) {
-            $this->addServiceConfig(true, $line_to_add_key);
-            $this->addServiceConfig();
-        }
+        $service = Service::create([
+            "name" => Str::of($this->argument('name'))->snake()->value,
+            "base_uri" => $this->argument('base_uri'),
+            "path" => $this->getPath(),
+            "access_secret" => $this->argument('access_secret'),
+        ]);
+        return $service->createToken("services")->plainTextToken;
     }
 }
