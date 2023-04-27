@@ -20,8 +20,6 @@ class $CLASS_NAME$Controller extends Controller
     public function __construct()
     {
         $this->$SERVICE_NAME$ = Service::where('name', '$SERVICE_NAME_SNAKE$')->first();
-        // EL middleware auth_access permite el acceso con validación de autorización a las rutas
-        //$this->middleware('auth_access');
         //$this->middleware('auth:sanctum');
         //$this->middleware('permission:name')->only(['func']);
     }
