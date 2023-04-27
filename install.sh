@@ -1,4 +1,4 @@
-app_name="api_gateway"
+app_name="crm_api_gateway"
 
 default_path="/var/www/html"
 tmp_path="/tmp/$app_name"
@@ -84,6 +84,10 @@ sh ./docker/commands/dev_dir_permissions.sh
 
 echo '# Api Gateway instalado con éxito. Realice las siguientes configuraciones para terminar.'
 echo ''
+echo '1. Agregre los middlewares de laravel permission en el archivo app\Http\Kernel.php en la variable $middlewareAliases'
+echo '  "role" => \Spatie\Permission\Middlewares\RoleMiddleware::class,'
+echo '  "permission" => \Spatie\Permission\Middlewares\PermissionMiddleware::class,'
+echo '  "role_or_permission" => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,'
 echo '1. Si va a utilizar autenticación para un SPA debe habilitar o agregar el siguiente middleware en la clave api del archivo app\Http\Kernel.php: \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,'
 echo '2. Configure el modelo User.php y su respectiva migración si requiere campos adicionales en la tabla de usuarios'
 echo '3. Configure su archivo .env'
