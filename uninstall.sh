@@ -10,6 +10,7 @@ mkdir $tmp_path
 
 echo '# Moviendo archivos y directorios ...'
 mv $default_path/docker $tmp_path/
+mv $default_path/app/Http/Middleware $tmp_path/
 mv $default_path/lang/es $tmp_path/
 mv $default_path/app/Helpers $tmp_path/
 mv $default_path/stubs $tmp_path/

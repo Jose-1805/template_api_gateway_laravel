@@ -20,6 +20,9 @@ mv $tmp_path/* $default_path/
 echo '# Eliminando ruta temporal ...'
 rm -r $tmp_path/
 
+echo '# Creando middlewares ...'
+mv $default_path/Middleware $default_path/app/Http
+
 echo '# Eliminando y remplazando modelos ...'
 rm -r $default_path/app/Models
 mv $default_path/Models/ $default_path/app/
@@ -63,7 +66,6 @@ mv $default_path/migrations/ $default_path/database/
 echo '# Creación de seeders ...'
 rm -r $default_path/database/seeders
 mv $default_path/seeders/ $default_path/database/
-
 echo '# Creando StubFormatter.php para crear clases de objetos laravel dinámicamente ...'
 mv $default_path/Helpers $default_path/app/
 
@@ -84,14 +86,16 @@ sh ./docker/commands/dev_dir_permissions.sh
 
 echo '# Api Gateway instalado con éxito. Realice las siguientes configuraciones para terminar.'
 echo ''
-echo '1. Agregre los middlewares de laravel permission en el archivo app\Http\Kernel.php en la variable $middlewareAliases'
+echo '1. Agregue los middlewares de laravel permission en el archivo app\Http\Kernel.php en la variable $middlewareAliases'
 echo '  "role" => \Spatie\Permission\Middlewares\RoleMiddleware::class,'
 echo '  "permission" => \Spatie\Permission\Middlewares\PermissionMiddleware::class,'
 echo '  "role_or_permission" => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,'
-echo '1. Si va a utilizar autenticación para un SPA debe habilitar o agregar el siguiente middleware en la clave api del archivo app\Http\Kernel.php: \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,'
-echo '2. Configure el modelo User.php y su respectiva migración si requiere campos adicionales en la tabla de usuarios'
-echo '3. Configure su archivo .env'
-echo '4. En la migración de personal access tokens cambie $table->morphs("tokenable"); por $table->uuidMorphs("tokenable");'
-echo '5. Ejecute php artisan migrate en el contenedor o artisan migrate si configuró comandos para acceso al contenedor'
-echo '6. Configure el Sedder de roles y permisos RolesAndPermissionsSeeder.php de acuerdo a los módulos y privilegios de su sistema'
-echo '7. Ejecute php artisan db:seed en el contenedor o artisan db:seed si configuró comandos para acceso al contenedor'
+echo '2. Agregue el middleware de autenticación de usuario de otros servicios en el archivo app\Http\Kernel.php en la variable $middlewareAliases'
+echo '  "auth_service_user" => \App\Http\Middleware\AuthenticateServiceUser::class,'
+echo '3. Si va a utilizar autenticación para un SPA debe habilitar o agregar el siguiente middleware en la clave api del archivo app\Http\Kernel.php: \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,'
+echo '4. Configure el modelo User.php y su respectiva migración si requiere campos adicionales en la tabla de usuarios'
+echo '5. Configure su archivo .env'
+echo '6. En la migración de personal access tokens cambie $table->morphs("tokenable"); por $table->uuidMorphs("tokenable");'
+echo '7. Ejecute php artisan migrate en el contenedor o artisan migrate si configuró comandos para acceso al contenedor'
+echo '8. Configure el Sedder de roles y permisos RolesAndPermissionsSeeder.php de acuerdo a los módulos y privilegios de su sistema'
+echo '9. Ejecute php artisan db:seed en el contenedor o artisan db:seed si configuró comandos para acceso al contenedor'

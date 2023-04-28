@@ -24,7 +24,7 @@ trait ServiceConsumer
 
         $request = Http::baseUrl($this->base_uri)->withHeaders([
             'Authorization' => $this->access_token,
-            'user_id' => $this->user_id
+            'UserId' => $this->user_id
         ]);
 
         $has_file = false;

@@ -20,7 +20,9 @@ class $CLASS_NAME$Controller extends Controller
     public function __construct()
     {
         $this->$SERVICE_NAME$ = Service::where('name', '$SERVICE_NAME_SNAKE$')->first();
-        //$this->middleware('auth:sanctum');
+        $this->middleware('auth:sanctum');
+        // Middleware para autenticar usuarios enviados desde otros servicios
+        $this->middleware('auth_service_user');
         //$this->middleware('permission:name')->only(['func']);
     }
 
