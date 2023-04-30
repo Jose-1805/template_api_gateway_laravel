@@ -132,5 +132,5 @@ echo '* Ejecute php artisan db:seed en el contenedor o artisan db:seed si config
 
 if [ "$REDIS" -eq 1 ]
 then
-    echo 'Configure su archivo .env para la conexión con redis (datos de acceso, host, puerto, cliente. Si va a manejar sesión, cache, etc)'
+    echo '* Configure su archivo .env para la conexión con redis (datos de acceso, host, puerto, cliente. Si va a manejar sesión, cache, etc)'
 fi
