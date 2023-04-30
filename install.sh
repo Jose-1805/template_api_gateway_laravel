@@ -5,6 +5,30 @@ tmp_path="/tmp/$app_name"
 #default_path="/home/jose/Descargas/new/api_gateway"
 #tmp_path="/home/jose/Descargas/new/tmp_$app_name"
 
+#!/bin/bash
+
+REDIS=0
+# Definir los argumentos
+while [[ $# -gt 0 ]]
+do
+key="$1"
+case $key in
+    -r|--redis)
+    REDIS=1
+    shift
+    shift
+    ;;
+    #-o|--output)
+    #OUTPUT="$2"
+    #shift
+    #shift
+    #;;
+    *)
+    shift
+    ;;
+esac
+done
+
 echo "shopt -s dotglob"
 shopt -s dotglob
 
@@ -76,6 +100,12 @@ php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
 echo '# Instalando laravel-permission para control de role sy permisos'
 composer require spatie/laravel-permission
 
+if [ "$REDIS" -eq 1 ]
+then
+    echo '# Insalando redis'
+    composer require predis/predis
+fi
+
 echo '# Instalando rutas iniciales ...'
 rm $default_path/routes/api.php
 mv api.php $default_path/routes/api.php
@@ -86,16 +116,21 @@ sh ./docker/commands/dev_dir_permissions.sh
 
 echo '# Api Gateway instalado con éxito. Realice las siguientes configuraciones para terminar.'
 echo ''
-echo '1. Agregue los middlewares de laravel permission en el archivo app\Http\Kernel.php en la variable $middlewareAliases'
+echo '* Agregue los middlewares de laravel permission en el archivo app\Http\Kernel.php en la variable $middlewareAliases'
 echo '  "role" => \Spatie\Permission\Middlewares\RoleMiddleware::class,'
 echo '  "permission" => \Spatie\Permission\Middlewares\PermissionMiddleware::class,'
 echo '  "role_or_permission" => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,'
-echo '2. Agregue el middleware de autenticación de usuario de otros servicios en el archivo app\Http\Kernel.php en la variable $middlewareAliases'
+echo '* Agregue el middleware de autenticación de usuario de otros servicios en el archivo app\Http\Kernel.php en la variable $middlewareAliases'
 echo '  "auth_service_user" => \App\Http\Middleware\AuthenticateServiceUser::class,'
-echo '3. Si va a utilizar autenticación para un SPA debe habilitar o agregar el siguiente middleware en la clave api del archivo app\Http\Kernel.php: \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,'
-echo '4. Configure el modelo User.php y su respectiva migración si requiere campos adicionales en la tabla de usuarios'
-echo '5. Configure su archivo .env'
-echo '6. En la migración de personal access tokens cambie $table->morphs("tokenable"); por $table->uuidMorphs("tokenable");'
-echo '7. Ejecute php artisan migrate en el contenedor o artisan migrate si configuró comandos para acceso al contenedor'
-echo '8. Configure el Sedder de roles y permisos RolesAndPermissionsSeeder.php de acuerdo a los módulos y privilegios de su sistema'
-echo '9. Ejecute php artisan db:seed en el contenedor o artisan db:seed si configuró comandos para acceso al contenedor'
+echo '* Si va a utilizar autenticación para un SPA debe habilitar o agregar el siguiente middleware en la clave api del archivo app\Http\Kernel.php: \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,'
+echo '* Configure el modelo User.php y su respectiva migración si requiere campos adicionales en la tabla de usuarios'
+echo '* Configure su archivo .env'
+echo '* En la migración de personal access tokens cambie $table->morphs("tokenable"); por $table->uuidMorphs("tokenable");'
+echo '* Ejecute php artisan migrate en el contenedor o artisan migrate si configuró comandos para acceso al contenedor'
+echo '* Configure el Sedder de roles y permisos RolesAndPermissionsSeeder.php de acuerdo a los módulos y privilegios de su sistema'
+echo '* Ejecute php artisan db:seed en el contenedor o artisan db:seed si configuró comandos para acceso al contenedor'
+
+if [ "$REDIS" -eq 1 ]
+then
+    echo 'Configure su archivo .env para la conexión con redis (datos de acceso, host, puerto, cliente. Si va a manejar sesión, cache, etc)'
+fi
