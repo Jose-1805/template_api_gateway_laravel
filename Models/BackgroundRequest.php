@@ -25,4 +25,18 @@ class BackgroundRequest extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Publica la solicitud en segundo plano para que sea consumida por el servicio
+     *
+     * @param [string] $event
+     * @param [string] $queue
+     * @return void
+     */
+    public function publish($event, $queue): void
+    {
+        if($queue) {
+            \Amqp::publish($event, json_encode($this->toArray()), ["queue" => $queue]);
+        }
+    }
 }

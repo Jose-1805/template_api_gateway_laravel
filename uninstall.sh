@@ -22,6 +22,7 @@ mv $default_path/routes/api.php $tmp_path/api.php
 mv $default_path/app/Models/ $tmp_path/
 mv $default_path/app/Traits/ $tmp_path/
 mv $default_path/app/Console/Commands/ServiceConnectionCommand.php $tmp_path/ServiceConnectionCommand.php
+mv $default_path/config/amqp.php $tmp_path/amqp.php
 mv $default_path/dev_commands.sh $tmp_path/dev_commands.sh
 mv $default_path/instrucciones.txt $tmp_path/instrucciones.txt
 mv $default_path/install.sh $tmp_path/install.sh

@@ -48,6 +48,9 @@ class $CLASS_NAME$Controller extends Controller
     {
         $response = $this->$SERVICE_NAME$->createElement($request->all());
         return $this->generateResponseByService($response);
+
+        // Ejemplo de ejecución en segundo plano
+        // return $this->$SERVICE_NAME$->resolveInBackground($request, "store");
     }
 
     /**

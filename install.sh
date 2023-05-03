@@ -83,6 +83,10 @@ printf '0\nyes' | php artisan octane:install
 # Permisos de ejecución para el archivo rr
 chmod +x $default_path/rr
 
+echo '# Instalando paquete de conexión a rabbitmq (bschmitt/laravel-amqp)'
+composer require bschmitt/laravel-amqp.'
+mv amqp.php $default_path/config/amqp.php
+
 echo '# Creación de migraciones requeridas ...'
 rm -r $default_path/database/migrations
 mv $default_path/migrations/ $default_path/database/
@@ -117,14 +121,23 @@ sh ./docker/commands/dev_dir_permissions.sh
 echo '# Api Gateway instalado con éxito. Realice las siguientes configuraciones para terminar.'
 echo ''
 echo '* Agregue los middlewares de laravel permission en el archivo app\Http\Kernel.php en la variable $middlewareAliases'
-echo '  "role" => \Spatie\Permission\Middlewares\RoleMiddleware::class,'
-echo '  "permission" => \Spatie\Permission\Middlewares\PermissionMiddleware::class,'
-echo '  "role_or_permission" => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,'
+echo '          "role" => \Spatie\Permission\Middlewares\RoleMiddleware::class,'
+echo '          "permission" => \Spatie\Permission\Middlewares\PermissionMiddleware::class,'
+echo '          "role_or_permission" => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,'
 echo '* Agregue el middleware de autenticación de usuario de otros servicios en el archivo app\Http\Kernel.php en la variable $middlewareAliases'
 echo '  "auth_service_user" => \App\Http\Middleware\AuthenticateServiceUser::class,'
 echo '* Si va a utilizar autenticación para un SPA debe habilitar o agregar el siguiente middleware en la clave api del archivo app\Http\Kernel.php: \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,'
 echo '* Configure el modelo User.php y su respectiva migración si requiere campos adicionales en la tabla de usuarios'
-echo '* Configure su archivo .env'
+echo '* Agregue Bschmitt\Amqp\AmqpServiceProvider::class a la lista de providers en el archivo config/app.php'
+echo '* Agregue "Amqp" => Bschmitt\Amqp\Facades\Amqp::class a la lista de aliases en el archivo config/app.php'
+echo '* Agregue las siguientes variables a su archivo .env para configurar la conexión a rabbitmq'
+echo '          RABBITMQ_HOST'
+echo '          RABBITMQ_PORT'
+echo '          RABBITMQ_USER'
+echo '          RABBITMQ_PASSWORD'
+echo '          RABBITMQ_VHOST'
+echo '* Configure QUEUE_CONNECTION=rabbitmq en su erchivo .env'
+echo '* Configure su archivo .env para el acceso a la base de datos'
 echo '* En la migración de personal access tokens cambie $table->morphs("tokenable"); por $table->uuidMorphs("tokenable");'
 echo '* Ejecute php artisan migrate en el contenedor o artisan migrate si configuró comandos para acceso al contenedor'
 echo '* Configure el Sedder de roles y permisos RolesAndPermissionsSeeder.php de acuerdo a los módulos y privilegios de su sistema'

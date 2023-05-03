@@ -16,7 +16,7 @@ class ServiceConnectionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:service-connection {name} {base_uri} {access_token} {--P|path=}';
+    protected $signature = 'make:service-connection {name} {base_uri} {access_token} {--P|path=} {--Q|queue=}';
 
     /**
      * The console command description.
@@ -174,7 +174,18 @@ class ServiceConnectionCommand extends Command
             "base_uri" => $this->argument('base_uri'),
             "path" => $this->getPath(),
             "access_token" => $this->argument('access_token'),
+            "queue" => $this->getQueueName(),
         ]);
         return $service->createToken("services")->plainTextToken;
+    }
+
+    /**
+     * Obtiene el nombre de la cola a la cual se conecta el servicio
+     *
+     * @return void
+     */
+    public function getQueueName()
+    {
+        return $this->option('path') ? $this->option('path') : Str::of($this->argument('name'))->snake()->value."_queue";
     }
 }
