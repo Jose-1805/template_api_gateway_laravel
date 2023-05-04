@@ -64,3 +64,19 @@ Para crear la configuración de un servicio nuevo
     al nombre asignado, para personalizar las variables puede ejecutar el comando con los parámetros opcionales:
     "php artisan make:service-connection Name BaseUri AccessToken --path=/example/path"
     Ejemplo "php artisan make:service-connection Contact http://contact_service access_token_1sdsd1f2sdf1 --path=/api/contact --queue=contact_service_queue"
+
+Para resolver trabajos en segundo plano
+    1. Ejecute el siguiente comando para y configurar una tarea para resolver en segundo plano
+            php artisan make:resolver NombreTarea --event=nombre_evento 
+    
+        El comando creará un archivo app/Background/NombreTarea.php dentro de la clase incluida en el archivo encontrará
+        un método handle, que recibe el nombre del evento y los datos de la petición en segundo plano, realice las tareas
+        requeridas y retorne una respuesta que será enviada al api_gateway o servicio que solicitó la acción. El comando
+        también configura el archivo config/background.php para el que el evento recibido en --event se asocie a la clase NombreTarea
+    
+    2. Para ejecutar un worker que reciba las solicitudes de ejecución en segundo plano ejecute el siguiente comando
+            php artisan consume:amqp nombre_cola_servicio
+        
+        Este comando se conectará a la cola que indique en nombre_cola_servicio (para el api gateway generalmente se utiliza api_gateway_queue.default) y de acuerdo al evento recibido ejecutará
+        el método handle de la clase asociada al evento en el archivo config/background.php. Si no existe el evento se registrara
+        un mensaje en el log.

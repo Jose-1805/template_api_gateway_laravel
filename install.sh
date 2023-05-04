@@ -61,8 +61,8 @@ mkdir $default_path/app/Services
 echo '# Creando directorio para almacenamiento de comandos ...'
 mkdir $default_path/app/Console/Commands
 
-echo '# Creando comando para la generación de recursos y configuraciones de conexión a servicios ...'
-mv ServiceConnectionCommand.php $default_path/app/Console/Commands/ServiceConnectionCommand.php
+echo '#  Creando comandos'
+mv $default_path/Commands $default_path/app/Console/
 
 echo '# Creando manejador de excepciones del sistema ...'
 mv Handler.php $default_path/app/Exceptions/Handler.php
@@ -75,6 +75,10 @@ php artisan lang:publish
 
 echo '# Creando archivos de internacionalización para español ...'
 mv $default_path/es $default_path/lang/
+
+echo '# Creando archivos de ejecución en segundo plano ...'
+mv $default_path/Background $default_path/app/
+mv $default_path/background.php $default_path/config/background.php
 
 echo '# Instalando laravel octane para mejorar el rendimiento de la aplicación ...'
 composer require laravel/octane --with-all-dependencies

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\ApiResponser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
@@ -38,5 +39,40 @@ class BackgroundRequest extends Model
         if($queue) {
             \Amqp::publish($event, json_encode($this->toArray()), ["queue" => $queue]);
         }
+    }
+
+    /**
+     * Consulta el estado actual de una solicitud en segundo plano
+     *
+     * @param [type] $id
+     * @param [type] $event
+     * @param [type] $user_id
+     * @return mixed
+     */
+    public static function result($id, $event, $user_id): mixed
+    {
+        $responser = (new class () {
+            use ApiResponser;
+        });
+
+        $background_request = self::where("id", $id)
+            ->where("event", $event)
+            ->where("user_id", $user_id)
+            ->first();
+
+        if($background_request) {
+            $data = [
+                "state" => $background_request->state,
+                "output_data" => $background_request->output_data
+            ];
+
+            // Las solicitudes finalizadas se eliminan una vez se consultan
+            if($background_request->state == 1) {
+                $background_request->delete();
+            }
+
+            return $responser->httpOkResponse($data);
+        }
+        return $responser->generateResponse("Not found", 404);
     }
 }
