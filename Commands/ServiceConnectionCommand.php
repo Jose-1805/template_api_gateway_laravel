@@ -16,7 +16,7 @@ class ServiceConnectionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:service-connection {name} {base_uri} {access_token} {--P|path=} {--Q|queue=}';
+    protected $signature = 'make:service-connection {name} {base_uri} {access_token} {--P|path=} {--Q|queue=} {--only_database}';
 
     /**
      * The console command description.
@@ -49,32 +49,42 @@ class ServiceConnectionCommand extends Command
      */
     public function handle()
     {
-        // Ruta de almacenamiento del servicio con nombre completo
-        $path_service = base_path('app/Services')."/".$this->getClassName($this->argument('name')) . 'Service.php';
-        // Ruta de almacenamiento del controlador con nombre completo
-        $path_controller = base_path('app/Http/Controllers') .'/' .$this->getClassName($this->argument('name')) . 'Controller.php';
+        if($this->option("only_database")) {
+            if(Service::where("name", strtolower(Str::of($this->argument('name'))->snake()->value))->count()) {
+                $this->error('Ya existe un servicio o controlador con el nombre sugerido "'.$this->argument('name').'"');
+            } else {
 
-        // No existe ningún servicio o controlador con el nombre solicitado
-        if (!$this->files->exists($path_service) && !$this->files->exists($path_controller) && !Service::where("name", strtolower(Str::of($this->argument('name'))->snake()->value))->count()) {
-            $this->comment('Creando controlador ...');
-            $path_stub_controller = __DIR__ . '/../../../stubs/service-controller.stub';
-            $formatter_controller = new StubFormatter(
-                $path_controller,
-                $this->getStubVariables(),
-                $path_stub_controller,
-                $this->files
-            );
-            $formatter_controller->make();
-            $this->info('Controlador creado con éxito');
-
-            $this->comment('Agregando rutas ...');
-            $this->addRoute($this->getClassName($this->argument('name')) . 'Controller', $this->getRoute());
-            $this->info('Rutas agregadas con éxito');
-
-            $this->comment('Creando servicio en base de datos ...');
-            $this->info("Servicio creado, guarde de forma segura el siguiente token de acceso en el servicio: ".$this->addServiceToDatabase());
+                $this->comment('Creando servicio en base de datos ...');
+                $this->info("Servicio creado, guarde de forma segura el siguiente token de acceso en el servicio: ".$this->addServiceToDatabase());
+            }
         } else {
-            $this->error('Ya existe un servicio o controlador con el nombre sugerido "'.$this->argument('name').'"');
+            // Ruta de almacenamiento del servicio con nombre completo
+            $path_service = base_path('app/Services')."/".$this->getClassName($this->argument('name')) . 'Service.php';
+            // Ruta de almacenamiento del controlador con nombre completo
+            $path_controller = base_path('app/Http/Controllers') .'/' .$this->getClassName($this->argument('name')) . 'Controller.php';
+
+            // No existe ningún servicio o controlador con el nombre solicitado
+            if (!$this->files->exists($path_service) && !$this->files->exists($path_controller) && !Service::where("name", strtolower(Str::of($this->argument('name'))->snake()->value))->count()) {
+                $this->comment('Creando controlador ...');
+                $path_stub_controller = __DIR__ . '/../../../stubs/service-controller.stub';
+                $formatter_controller = new StubFormatter(
+                    $path_controller,
+                    $this->getStubVariables(),
+                    $path_stub_controller,
+                    $this->files
+                );
+                $formatter_controller->make();
+                $this->info('Controlador creado con éxito');
+
+                $this->comment('Agregando rutas ...');
+                $this->addRoute($this->getClassName($this->argument('name')) . 'Controller', $this->getRoute());
+                $this->info('Rutas agregadas con éxito');
+
+                $this->comment('Creando servicio en base de datos ...');
+                $this->info("Servicio creado, guarde de forma segura el siguiente token de acceso en el servicio: ".$this->addServiceToDatabase());
+            } else {
+                $this->error('Ya existe un servicio o controlador con el nombre sugerido "'.$this->argument('name').'"');
+            }
         }
     }
 
@@ -186,6 +196,6 @@ class ServiceConnectionCommand extends Command
      */
     public function getQueueName()
     {
-        return $this->option('path') ? $this->option('path') : Str::of($this->argument('name'))->snake()->value."_queue";
+        return $this->option('queue') ? $this->option('queue') : Str::of($this->argument('name'))->snake()->value."_queue";
     }
 }
