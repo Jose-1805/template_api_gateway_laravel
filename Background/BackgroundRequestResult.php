@@ -15,7 +15,7 @@ class BackgroundRequestResult implements Resolver
         if($background_request) {
             $background_request->update([
                 "output_data" => $data["output_data"],
-                "state" => 1
+                "state" => "1"
             ]);
         }
 
