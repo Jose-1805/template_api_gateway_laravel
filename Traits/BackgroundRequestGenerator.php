@@ -10,8 +10,6 @@ trait BackgroundRequestGenerator
     use JsonRequestConverter;
     use ApiResponser;
 
-    public $queue;
-
     /**
      * Almacena un request para que sea resuelto en segundo plano
      *
