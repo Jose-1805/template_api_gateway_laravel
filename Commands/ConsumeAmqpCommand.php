@@ -15,6 +15,7 @@ class ConsumeAmqpCommand extends Command
      * @var string
      */
     protected $signature = 'consume:amqp {queue}';
+    protected $connection_error = true;
 
     /**
      * The console command description.
@@ -37,6 +38,9 @@ class ConsumeAmqpCommand extends Command
         Log::info("Conectando a Rabbit MQ");
         while(!$this->connect()) {
             sleep(config("amqp.interval_connection", 5));
+            if($this->connection_error) {
+                Log::info("Intentando conectar nuevamente a RabbitMq");
+            }
         }
     }
 
@@ -50,8 +54,14 @@ class ConsumeAmqpCommand extends Command
                 $background_request_resolver->resolve();
                 $resolver->acknowledge($message);
             });
+
+            if($this->connection_error) {
+                $this->connection_error = false;
+                Log::info("Conectado correctamente a Rabbit MQ");
+            }
         } catch (Exception $e) {
             $result = null;
+            $this->connection_error = true;
             Log::error("Error en conexión a Rabbit MQ", ["error" => $e->getMessage()]);
         }
         return $result;
