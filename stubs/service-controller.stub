@@ -31,8 +31,9 @@ class $CLASS_NAME$Controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
         $response = $this->$SERVICE_NAME$->getElements();
 
         return $this->generateResponseByService($response);
@@ -46,6 +47,7 @@ class $CLASS_NAME$Controller extends Controller
      */
     public function store(Request $request)
     {
+        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
         $response = $this->$SERVICE_NAME$->createElement($request->all());
         return $this->generateResponseByService($response);
 
@@ -59,8 +61,9 @@ class $CLASS_NAME$Controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
         $response = $this->$SERVICE_NAME$->getElement($id);
         return $this->generateResponseByService($response);
     }
@@ -74,6 +77,7 @@ class $CLASS_NAME$Controller extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
         $response = $this->$SERVICE_NAME$->updateElement($id, $request->all());
         return $this->generateResponseByService($response);
     }
@@ -84,8 +88,9 @@ class $CLASS_NAME$Controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
         $response = $this->$SERVICE_NAME$->destroy($id);
         return $this->generateResponseByService($response);
     }
