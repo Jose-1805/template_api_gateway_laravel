@@ -32,6 +32,8 @@ Para instalar en un cluster de docker-compose:
         - en el archivo install.sh y uninstall.sh cambiar el valor del campo app_name por el nombre asignado al nombre
         de la carpeta del proyecto
         - en el archivo install.sh y uninstall.sh cambiar la propiedad default_path, por el la ubicación del proyecto en el contenedor
+        - En el archivo docker/supervisord.conf cambiar el nombre de la cola api_gateway_queue.default por el nombre de la cola de Rabbit MQ
+        a la que se debe conectar el sistema para realizar tareas asíncronas
 
     4. Crear la imagen de los servicios y arrancarlos con los siguientes comandos en el proyecto que almacene el
             archivo docker-compose.yaml:

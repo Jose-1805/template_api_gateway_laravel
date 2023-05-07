@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Background\src\BackgroundRequestResolver;
+use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class ConsumeAmqpCommand extends Command
 {
@@ -32,10 +34,26 @@ class ConsumeAmqpCommand extends Command
      */
     public function handle()
     {
-        return \Amqp::consume($this->argument('queue'), function ($message, $resolver) {
-            $background_request_resolver = new BackgroundRequestResolver($message->getRoutingKey(), $message->body);
-            $background_request_resolver->resolve();
-            $resolver->acknowledge($message);
-        });
+        Log::info("Conectando a Rabbit MQ");
+        while(!$this->connect()) {
+            sleep(config("amqp.interval_connection", 5));
+        }
+    }
+
+    public function connect()
+    {
+        $result = null;
+
+        try {
+            $result = \Amqp::consume($this->argument('queue'), function ($message, $resolver) {
+                $background_request_resolver = new BackgroundRequestResolver($message->getRoutingKey(), $message->body);
+                $background_request_resolver->resolve();
+                $resolver->acknowledge($message);
+            });
+        } catch (Exception $e) {
+            $result = null;
+            Log::error("Error en conexión a Rabbit MQ", ["error" => $e->getMessage()]);
+        }
+        return $result;
     }
 }
