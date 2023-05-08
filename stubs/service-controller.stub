@@ -34,7 +34,7 @@ class $CLASS_NAME$Controller extends Controller
     public function index(Request $request)
     {
         $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
-        $response = $this->$SERVICE_NAME$->getElements();
+        $response = $this->$SERVICE_NAME$->getElements($request->all());
 
         return $this->generateResponseByService($response);
     }

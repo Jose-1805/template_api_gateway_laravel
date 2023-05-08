@@ -68,9 +68,9 @@ trait ServiceConsumer
      *
      * @return array
      */
-    public function getElements(): array
+    public function getElements($params = []): array
     {
-        return $this->performRequest('GET', $this->path);
+        return $this->performRequest('GET', $this->path, $params);
     }
 
     /**
