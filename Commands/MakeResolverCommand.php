@@ -50,7 +50,7 @@ class MakeResolverCommand extends Command
     {
         $path_resolver = base_path('app/Background') .'/' .$this->getClassName($this->argument('name')) . '.php';
         if(file_exists($path_resolver)) {
-            $this->warn("Ya existe un archivo llamado ".$this->getClassName($this->argument('name')).".php");
+            $this->warn('Ya existe un archivo llamado '.$this->getClassName($this->argument('name')).'.php');
         } else {
             $this->comment('Creando archivo ...');
             $this->comment($path_resolver.' ...');
@@ -65,12 +65,12 @@ class MakeResolverCommand extends Command
             $formatter_resolver->make();
             $this->info('Archivo creado con éxito');
 
-            if($this->option("event")) {
-                $this->addEventSetting($this->option("event"));
+            if($this->option('event')) {
+                $this->addEventSetting($this->option('event'));
             }
 
             $this->info('Recurso creado con éxito');
-            if(!$this->option("event")) {
+            if(!$this->option('event')) {
                 $this->comment('Recuerde configurar el evento asociado en el archivo de configuración config/background.php');
             }
         }
@@ -112,13 +112,13 @@ class MakeResolverCommand extends Command
         $events_found = false;
         $event_is_added = false;
 
-        $content = "";
+        $content = '';
         while ($line = fgets($file)) {
-            // Se encuentra por primera vez la clave "events"
-            if (str_contains($line, '"events" => [') && !$events_found) {
+            // Se encuentra por primera vez la clave 'events'
+            if (str_contains($line, '\'events\' => [') && !$events_found) {
                 $events_found = true;
-            } elseif ($events_found && str_contains($line, "],") && !$event_is_added) {
-                $content .= '        "'.$event.'" => App\\Background\\'.$this->getClassName($this->argument('name')).'::class,'.PHP_EOL;
+            } elseif ($events_found && str_contains($line, '],') && !$event_is_added) {
+                $content .= '        \''.$event.'\' => App\\Background\\'.$this->getClassName($this->argument('name')).'::class,'.PHP_EOL;
                 $event_is_added= true;
             }
             $content .= $line;

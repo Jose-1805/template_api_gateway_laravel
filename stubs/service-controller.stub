@@ -53,7 +53,7 @@ class $CLASS_NAME$Controller extends Controller
 
         // $this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
         // Ejemplo de ejecución en segundo plano
-        // return $this->$SERVICE_NAME$->resolveInBackground($request, "create_element");
+        // return $this->$SERVICE_NAME$->resolveInBackground($request, 'create_element');
     }
 
     /**
@@ -83,8 +83,8 @@ class $CLASS_NAME$Controller extends Controller
         return $this->generateResponseByService($response);
 
         //$this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
-        //$request->merge(["id" => $id]);
-        //return $this->$SERVICE_NAME$->resolveInBackground($request, "update_element");
+        //$request->merge(['id' => $id]);
+        //return $this->$SERVICE_NAME$->resolveInBackground($request, 'update_element');
     }
 
     /**
@@ -100,7 +100,7 @@ class $CLASS_NAME$Controller extends Controller
         return $this->generateResponseByService($response);
 
         //$this->$SERVICE_NAME$->user_id = $request->user() ? $request->user()->id : null;
-        //$request->merge(["id" => $id]);
-        //return $this->$SERVICE_NAME$->resolveInBackground($request, "delete_element");
+        //$request->merge(['id' => $id]);
+        //return $this->$SERVICE_NAME$->resolveInBackground($request, 'delete_element');
     }
 }

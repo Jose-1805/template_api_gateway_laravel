@@ -38,9 +38,9 @@ trait ApiResponser
     public function generateResponseByService($data): JsonResponse
     {
         if (array_key_exists('data', $data) && array_key_exists('code', $data)) {
-            return $this->generateResponse($data['data'], $data["code"]);
+            return $this->generateResponse($data['data'], $data['code']);
         } elseif (array_key_exists('error', $data) && array_key_exists('code', $data)) {
-            return $this->generateResponse($data['error'], $data["code"]);
+            return $this->generateResponse($data['error'], $data['code']);
         } elseif (array_key_exists('error', $data)) {
             return $this->generateResponse($data['error'], 500);
         }
@@ -54,7 +54,7 @@ trait ApiResponser
      * @param string|array $data
      * @return JsonResponse
      */
-    public function httpOkResponse($data = "Success."): JsonResponse
+    public function httpOkResponse($data = 'Success.'): JsonResponse
     {
         return $this->generateResponse($data, Response::HTTP_OK);
     }
@@ -67,6 +67,6 @@ trait ApiResponser
      */
     public function httpUnauthorizedResponse(): JsonResponse
     {
-        return $this->generateResponse("Unauthorized.", Response::HTTP_UNAUTHORIZED);
+        return $this->generateResponse('Unauthorized.', Response::HTTP_UNAUTHORIZED);
     }
 }

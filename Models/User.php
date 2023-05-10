@@ -56,7 +56,7 @@ class User extends Model implements Authorizable
      */
     public function allData(): User
     {
-        $this->role_data = $this->roles()->select("roles.id", "roles.name")->with("permissions:id,name")->get();
+        $this->role_data = $this->roles()->select('roles.id', 'roles.name')->with('permissions:id,name')->get();
         $this->permissions;
         return $this;
     }

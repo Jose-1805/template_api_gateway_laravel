@@ -12,11 +12,11 @@ class BackgroundRequestResolver
     // (id, event, state, input_data, output_data, user_id)
     private $data;
 
-    private $event_response = "background_request_result";
-    private $queue_response = "api_gateway_queue.default";
+    private $event_response = 'background_request_result';
+    private $queue_response = 'api_gateway_queue.default';
     private $publish_response = true;
     // Datos por defecto que se envían en la respuesta
-    private $response_keys = ["id", "event", "output_data"];
+    private $response_keys = ['id', 'event', 'output_data'];
 
 
     public function __construct(string $event, string $data)
@@ -34,7 +34,7 @@ class BackgroundRequestResolver
     public function publishResult(): void
     {
         if($this->queue_response) {
-            \Amqp::publish($this->event_response, $this->responseData(), ["queue" => $this->queue_response]);
+            \Amqp::publish($this->event_response, $this->responseData(), ['queue' => $this->queue_response]);
         }
     }
 
@@ -67,25 +67,25 @@ class BackgroundRequestResolver
         if($resolver_class) {
             $resolver = new ($resolver_class)();
             $data_response = $resolver->handle($this->data);
-            $this->data["output_data"] = array_key_exists("response", $data_response) && is_array($data_response["response"]) ? $data_response["response"] : [] ;
+            $this->data['output_data'] = array_key_exists('response', $data_response) && is_array($data_response['response']) ? $data_response['response'] : [] ;
             // Se envían datos para cambiar el destino de la respuesta
-            if(array_key_exists("options", $data_response) && is_array($data_response["options"])) {
-                if(array_key_exists("event", $data_response["options"]) && $data_response["options"]["event"]) {
-                    $this->event_response = $data_response["options"]["event"];
+            if(array_key_exists('options', $data_response) && is_array($data_response['options'])) {
+                if(array_key_exists('event', $data_response['options']) && $data_response['options']['event']) {
+                    $this->event_response = $data_response['options']['event'];
                 }
-                if(array_key_exists("queue", $data_response["options"]) && $data_response["options"]["queue"]) {
-                    $this->queue_response = $data_response["options"]["queue"];
+                if(array_key_exists('queue', $data_response['options']) && $data_response['options']['queue']) {
+                    $this->queue_response = $data_response['options']['queue'];
                 }
-                if(array_key_exists("publish", $data_response["options"])) {
-                    $this->publish_response = $data_response["options"]["publish"] ? true : false;
+                if(array_key_exists('publish', $data_response['options'])) {
+                    $this->publish_response = $data_response['options']['publish'] ? true : false;
                 }
-                if(array_key_exists("response_keys", $data_response["options"]) && is_array($data_response["options"]["response_keys"])) {
-                    $this->response_keys = $data_response["options"]["response_keys"];
+                if(array_key_exists('response_keys', $data_response['options']) && is_array($data_response['options']['response_keys'])) {
+                    $this->response_keys = $data_response['options']['response_keys'];
                 }
             }
             $this->publish_response && $this->publishResult();
         } else {
-            Log::warning("No se encontró configuración para el evento ".$this->event);
+            Log::warning('No se encontró configuración para el evento '.$this->event);
         }
     }
 }

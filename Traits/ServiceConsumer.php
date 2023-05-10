@@ -57,7 +57,7 @@ trait ServiceConsumer
                     echo $response->body();
                 }, '', $response->headers());
             }
-            $data = ['error' => config('app.debug') && strlen($response->body()) ? $response->body() : "Error interno del servidor", 'code' => 500];
+            $data = ['error' => config('app.debug') && strlen($response->body()) ? $response->body() : 'Error interno del servidor', 'code' => 500];
         }
 
         return $data;

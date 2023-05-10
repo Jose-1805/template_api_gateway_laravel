@@ -49,22 +49,22 @@ class ServiceConnectionCommand extends Command
      */
     public function handle()
     {
-        if($this->option("only_database")) {
-            if(Service::where("name", strtolower(Str::of($this->argument('name'))->snake()->value))->count()) {
-                $this->error('Ya existe un servicio o controlador con el nombre sugerido "'.$this->argument('name').'"');
+        if($this->option('only_database')) {
+            if(Service::where('name', strtolower(Str::of($this->argument('name'))->snake()->value))->count()) {
+                $this->error('Ya existe un servicio o controlador con el nombre sugerido \''.$this->argument('name').'\'');
             } else {
 
                 $this->comment('Creando servicio en base de datos ...');
-                $this->info("Servicio creado, guarde de forma segura el siguiente token de acceso en el servicio: ".$this->addServiceToDatabase());
+                $this->info('Servicio creado, guarde de forma segura el siguiente token de acceso en el servicio: '.$this->addServiceToDatabase());
             }
         } else {
             // Ruta de almacenamiento del servicio con nombre completo
-            $path_service = base_path('app/Services')."/".$this->getClassName($this->argument('name')) . 'Service.php';
+            $path_service = base_path('app/Services').'/'.$this->getClassName($this->argument('name')) . 'Service.php';
             // Ruta de almacenamiento del controlador con nombre completo
             $path_controller = base_path('app/Http/Controllers') .'/' .$this->getClassName($this->argument('name')) . 'Controller.php';
 
             // No existe ningún servicio o controlador con el nombre solicitado
-            if (!$this->files->exists($path_service) && !$this->files->exists($path_controller) && !Service::where("name", strtolower(Str::of($this->argument('name'))->snake()->value))->count()) {
+            if (!$this->files->exists($path_service) && !$this->files->exists($path_controller) && !Service::where('name', strtolower(Str::of($this->argument('name'))->snake()->value))->count()) {
                 $this->comment('Creando controlador ...');
                 $path_stub_controller = __DIR__ . '/../../../stubs/service-controller.stub';
                 $formatter_controller = new StubFormatter(
@@ -81,9 +81,9 @@ class ServiceConnectionCommand extends Command
                 $this->info('Rutas agregadas con éxito');
 
                 $this->comment('Creando servicio en base de datos ...');
-                $this->info("Servicio creado, guarde de forma segura el siguiente token de acceso en el servicio: ".$this->addServiceToDatabase());
+                $this->info('Servicio creado, guarde de forma segura el siguiente token de acceso en el servicio: '.$this->addServiceToDatabase());
             } else {
-                $this->error('Ya existe un servicio o controlador con el nombre sugerido "'.$this->argument('name').'"');
+                $this->error('Ya existe un servicio o controlador con el nombre sugerido \''.$this->argument('name').'\'');
             }
         }
     }
@@ -160,15 +160,15 @@ class ServiceConnectionCommand extends Command
     {
         $file = fopen(base_path('routes/api.php'), 'r+') or die('Error');
         $use_is_added = false;
-        $content = "";
+        $content = '';
         while ($line = fgets($file)) {
             if (str_contains($line, 'use ') && !$use_is_added) {
-                $content .= "use App\Http\Controllers\\$controller_name;\n";
+                $content .= 'use App\Http\Controllers\\$controller_name;'.PHP_EOL;
                 $use_is_added = true;
             }
             $content .= $line;
         }
-        $content .= "Route::apiResource('$route_name', $controller_name::class);\n";
+        $content .= 'Route::apiResource(\'$route_name\', $controller_name::class);'.PHP_EOL;
         rewind($file);
         fwrite($file, $content);
         fclose($file);
@@ -180,13 +180,13 @@ class ServiceConnectionCommand extends Command
     public function addServiceToDatabase(): string
     {
         $service = Service::create([
-            "name" => Str::of($this->argument('name'))->snake()->value,
-            "base_uri" => $this->argument('base_uri'),
-            "path" => $this->getPath(),
-            "access_token" => $this->argument('access_token'),
-            "queue" => $this->getQueueName(),
+            'name' => Str::of($this->argument('name'))->snake()->value,
+            'base_uri' => $this->argument('base_uri'),
+            'path' => $this->getPath(),
+            'access_token' => $this->argument('access_token'),
+            'queue' => $this->getQueueName(),
         ]);
-        return $service->createToken("services")->plainTextToken;
+        return $service->createToken('services')->plainTextToken;
     }
 
     /**
@@ -196,6 +196,6 @@ class ServiceConnectionCommand extends Command
      */
     public function getQueueName()
     {
-        return $this->option('queue') ? $this->option('queue') : Str::of($this->argument('name'))->snake()->value."_queue";
+        return $this->option('queue') ? $this->option('queue') : Str::of($this->argument('name'))->snake()->value.'_queue';
     }
 }

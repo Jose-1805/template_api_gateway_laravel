@@ -35,11 +35,11 @@ class ConsumeAmqpCommand extends Command
      */
     public function handle()
     {
-        Log::info("Conectando a Rabbit MQ");
+        Log::info('Conectando a Rabbit MQ');
         while(!$this->connect()) {
-            sleep(config("amqp.interval_connection", 5));
+            sleep(config('amqp.interval_connection', 5));
             if($this->connection_error) {
-                Log::info("Intentando conectar nuevamente a RabbitMq");
+                Log::info('Intentando conectar nuevamente a RabbitMq');
             }
         }
     }
@@ -57,12 +57,12 @@ class ConsumeAmqpCommand extends Command
 
             if($this->connection_error) {
                 $this->connection_error = false;
-                Log::info("Conectado correctamente a Rabbit MQ");
+                Log::info('Conectado correctamente a Rabbit MQ');
             }
         } catch (Exception $e) {
             $result = null;
             $this->connection_error = true;
-            Log::error("Error en conexión a Rabbit MQ", ["error" => $e->getMessage()]);
+            Log::error('Error en conexión a Rabbit MQ', ['error' => $e->getMessage()]);
         }
         return $result;
     }

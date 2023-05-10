@@ -67,7 +67,7 @@ class Handler extends ExceptionHandler
         }
         if ($exception instanceof ModelNotFoundException) {
             $model = strtolower(class_basename($exception->getModel()));
-            return $this->generateResponse("Does not exist any instance of {$model} with the given id", Response::HTTP_NOT_FOUND);
+            return $this->generateResponse('Does not exist any instance of '.$model.' with the given id', Response::HTTP_NOT_FOUND);
         }
         if ($exception instanceof AuthorizationException) {
             return $this->generateResponse($exception->getMessage(), Response::HTTP_FORBIDDEN);
@@ -86,7 +86,7 @@ class Handler extends ExceptionHandler
             return $this->generateResponse($message, $code);
         }
         if ($exception instanceof RouteNotFoundException) {
-            return $this->generateResponse("Route not found (".$request->fullUrl().")", Response::HTTP_NOT_FOUND);
+            return $this->generateResponse('Route not found ('.$request->fullUrl().')', Response::HTTP_NOT_FOUND);
         }
 
 

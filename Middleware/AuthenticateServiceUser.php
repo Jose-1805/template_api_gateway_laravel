@@ -28,7 +28,7 @@ class AuthenticateServiceUser
             // La petición se realizó desde un servicio
             if(get_class($user) == Service::class) {
                 // La petición se realiza a nombre de un usuario
-                if($request->header("UserId")) {
+                if($request->header('UserId')) {
                     $user = User::findOrFail($request->header('UserId'));
 
                     $request->setUserResolver(function () use ($user) {
@@ -50,7 +50,7 @@ class AuthenticateServiceUser
             // El token es de un servicio
             if($token->tokenable_type == Service::class) {
                 // La petición se realiza a nombre de un usuario
-                if($request->header("UserId")) {
+                if($request->header('UserId')) {
                     $user = User::find($request->header('UserId'));
 
                     $request->setUserResolver(function () use ($user) {

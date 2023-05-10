@@ -31,8 +31,8 @@ trait BackgroundRequestGenerator
         $background_request->publish($event, $this->queue);
 
         $data = [
-            "id" => $background_request->id,
-            "event" => $background_request->event,
+            'id' => $background_request->id,
+            'event' => $background_request->event,
         ];
 
         return $http_response ? $this->httpOkResponse($data) : $data;

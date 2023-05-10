@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "events" => [
-        "background_request_result" => App\Background\BackgroundRequestResult::class,
+    'events' => [
+        'background_request_result' => App\Background\BackgroundRequestResult::class,
     ],
 ];

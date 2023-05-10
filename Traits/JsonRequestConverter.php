@@ -21,7 +21,7 @@ trait JsonRequestConverter
             $fileData = null;
             if(is_a($files, UploadedFile::class)) {
                 $fileData = $this->getFileData($files);
-            } elseif(gettype($files) == "array") {
+            } elseif(gettype($files) == 'array') {
                 $fileData = [];
                 foreach ($files as $file) {
                     $fileData[] = $this->getFileData($file);

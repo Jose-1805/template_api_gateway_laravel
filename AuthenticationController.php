@@ -15,7 +15,7 @@ class AuthenticationController extends Controller
 
     public function __construct()
     {
-        $this->middleware("auth:sanctum")->only(["logoutToken", "authUserData"]);
+        $this->middleware('auth:sanctum')->only(['logoutToken', 'authUserData']);
     }
 
     /**
@@ -50,7 +50,7 @@ class AuthenticationController extends Controller
                 ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        return $this->httpOkResponse(["token" => $user->createToken($request->device_name)->plainTextToken, "user" => $user]);
+        return $this->httpOkResponse(['token' => $user->createToken($request->device_name)->plainTextToken, 'user' => $user]);
     }
 
     /**

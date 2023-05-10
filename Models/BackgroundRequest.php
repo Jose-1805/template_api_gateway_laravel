@@ -37,7 +37,7 @@ class BackgroundRequest extends Model
     public function publish($event, $queue): void
     {
         if($queue) {
-            \Amqp::publish($event, json_encode($this->toArray()), ["queue" => $queue]);
+            \Amqp::publish($event, json_encode($this->toArray()), ['queue' => $queue]);
         }
     }
 
@@ -55,15 +55,15 @@ class BackgroundRequest extends Model
             use ApiResponser;
         });
 
-        $background_request = self::where("id", $id)
-            ->where("event", $event)
-            ->where("user_id", $user_id)
+        $background_request = self::where('id', $id)
+            ->where('event', $event)
+            ->where('user_id', $user_id)
             ->first();
 
         if($background_request) {
             $data = [
-                "state" => $background_request->state,
-                "output_data" => $background_request->output_data
+                'state' => $background_request->state,
+                'output_data' => $background_request->output_data
             ];
 
             // Las solicitudes finalizadas se eliminan una vez se consultan
@@ -73,6 +73,6 @@ class BackgroundRequest extends Model
 
             return $responser->httpOkResponse($data);
         }
-        return $responser->generateResponse("Not found", 404);
+        return $responser->generateResponse('Not found', 404);
     }
 }

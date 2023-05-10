@@ -11,11 +11,11 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('tokens', function (Blueprint $table) {
-            $table->uuid("id")->unique()->comment('Identificador único de cada registro');
-            $table->enum("type", ["fcm"])->comment("Tipo de token registrado");
-            $table->string("token", 250)->unique()->comment("Token registrado");
+            $table->uuid('id')->unique()->comment('Identificador único de cada registro');
+            $table->enum('type', ['fcm'])->comment('Tipo de token registrado');
+            $table->string('token', 250)->unique()->comment('Token registrado');
             $table->foreignUuid('user_id')
-                ->comment("Relación al usuario asociado al token")
+                ->comment('Relación al usuario asociado al token')
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
