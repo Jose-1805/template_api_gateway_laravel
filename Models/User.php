@@ -2,18 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\Access\Authorizable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\Access\Authorizable as AccessAuthorizable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Model
+class User extends Model implements Authorizable
 {
     use HasFactory;
     use HasApiTokens;
     use HasRoles;
     use HasUuids;
+    use AccessAuthorizable;
 
 
     protected $fillable = [
