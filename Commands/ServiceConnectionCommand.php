@@ -196,6 +196,6 @@ class ServiceConnectionCommand extends Command
      */
     public function getQueueName()
     {
-        return $this->option('queue') ? $this->option('queue') : Str::of($this->argument('name'))->snake()->value.'_queue';
+        return $this->option('queue') ? $this->option('queue') : Str::of($this->argument('name'))->snake()->value.'_queue.default';
     }
 }
