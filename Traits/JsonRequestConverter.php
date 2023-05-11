@@ -7,6 +7,8 @@ use Illuminate\Http\UploadedFile;
 
 trait JsonRequestConverter
 {
+    // Nombre de directorio donde se almacenan los archivos temporales compartidos
+    protected $shared_temps_dir = 'shared_temps';
     /**
      * Convierte los datos de un request en un Json
      *
@@ -20,11 +22,11 @@ trait JsonRequestConverter
         foreach ($request->allFiles() as $fieldName => $files) {
             $fileData = null;
             if(is_a($files, UploadedFile::class)) {
-                $fileData = $this->getFileData($files);
+                $fileData = $this->getTempFileData($files);
             } elseif(gettype($files) == 'array') {
                 $fileData = [];
                 foreach ($files as $file) {
-                    $fileData[] = $this->getFileData($file);
+                    $fileData[] = $this->getTempFileData($file);
                 }
             }
             $requestData[$fieldName] = $fileData;
@@ -35,17 +37,22 @@ trait JsonRequestConverter
     }
 
     /**
-     * Obtiene la información de un archivo y su contenido
+     * Obtiene la información de almacenamiento temporal de un archivo
      *
      * @param UploadedFile $file
+     * @param bool $file
      */
-    public function getFileData(UploadedFile $file): array
+    public function getTempFileData(UploadedFile $file): array
     {
-        $fileContent = base64_encode(file_get_contents($file->path()));
+        $name = $file->hashName().'.'.$file->extension();
+        $original_name = $file->getClientOriginalName().'.'.$file->extension();
+        $path = $this->shared_temps_dir.'/'.strtotime(date('Y-m-d H:i:s'));
+        $file->storeAs($path, $name, 'local');
         return [
-            'name' => $file->getClientOriginalName(),
-            'type' => $file->getClientMimeType(),
-            'content' => $fileContent
+            'name' => $name,
+            'original_name' => $original_name,
+            'type' => $file->getMimeType(),
+            'path' => $path
         ];
     }
 }
