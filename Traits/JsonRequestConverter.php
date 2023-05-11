@@ -44,7 +44,7 @@ trait JsonRequestConverter
      */
     public function getTempFileData(UploadedFile $file): array
     {
-        $name = $file->hashName().'.'.$file->extension();
+        $name = $file->hashName();
         $original_name = $file->getClientOriginalName();
         $path = $this->shared_temps_dir.'/'.strtotime(date('Y-m-d H:i:s'));
         $file->storeAs($path, $name, 'local');
