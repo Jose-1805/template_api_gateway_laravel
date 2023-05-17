@@ -64,7 +64,7 @@ Para crear la configuración de un servicio nuevo
     2. Ejecute el comando "php artisan make:service-connection Name BaseUri AccessToken", el comando creará todos los recursos
     necesarios para conectarse al servicio Name, el comando crea registros de configuración de acuerdo
     al nombre asignado, para personalizar las variables puede ejecutar el comando con los parámetros opcionales:
-    "php artisan make:service-connection Name BaseUri AccessToken --path=/example/path"
+    "php artisan make:service-connection Name BaseUri AccessToken --path=/example/path --queue=service_queue_name"
     Ejemplo "php artisan make:service-connection Contact http://contact_service access_token_1sdsd1f2sdf1 --path=/api/contact --queue=contact_service_queue"
 
 Para resolver trabajos en segundo plano
