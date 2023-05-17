@@ -168,7 +168,7 @@ class ServiceConnectionCommand extends Command
             }
             $content .= $line;
         }
-        $content .= 'Route::apiResource(\'$route_name\', $controller_name::class);'.PHP_EOL;
+        $content .= 'Route::apiResource(\''.$route_name.'\', '.$controller_name.'::class);'.PHP_EOL;
         rewind($file);
         fwrite($file, $content);
         fclose($file);
