@@ -1,9 +1,7 @@
-app_name="crm_api_gateway"
+app_name="service_api_gateway"
 
 default_path="/var/www/html"
 tmp_path="/tmp/$app_name"
-#default_path="/home/jose/Descargas/new/api_gateway"
-#tmp_path="/home/jose/Descargas/new/tmp_$app_name"
 
 #!/bin/bash
 
@@ -45,7 +43,8 @@ echo '# Eliminando ruta temporal ...'
 rm -r $tmp_path/
 
 echo '# Creando middlewares ...'
-mv $default_path/Middleware $default_path/app/Http
+cp $default_path/Middleware/* $default_path/app/Http/Middleware
+rm -r $default_path/Middleware
 
 echo '# Eliminando y remplazando modelos ...'
 rm -r $default_path/app/Models

@@ -1,16 +1,15 @@
-app_name="api_gateway"
+app_name="service_api_gateway"
 
 default_path="/var/www/html"
 tmp_path="/tmp/$app_name"
-#default_path="/home/jose/Descargas/new/api_gateway"
-#tmp_path="/home/jose/Descargas/new/tmp_$app_name"
 
 echo '# Creando directorio temporal ...'
 mkdir $tmp_path
 
 echo '# Moviendo archivos y directorios ...'
 mv $default_path/docker $tmp_path/
-mv $default_path/app/Http/Middleware $tmp_path/
+mkdir $tmp_path/Middleware
+mv $default_path/app/Http/Middleware/AuthenticateServiceUser.php $tmp_path/Middleware
 mv $default_path/lang/es $tmp_path/
 mv $default_path/app/Helpers $tmp_path/
 mv $default_path/stubs $tmp_path/
@@ -32,7 +31,7 @@ mv $default_path/uninstall.sh $tmp_path/uninstall.sh
 
 echo '# Limpiando directorio por defecto ...'
 rm -r $default_path/*
-rm -r $default_path/.*
+#rm -r $default_path/.*
 
 echo '# Moviendo archivos al directorio final ...'
 mv $tmp_path/* $default_path/

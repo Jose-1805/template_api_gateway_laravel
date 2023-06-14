@@ -43,7 +43,7 @@ Para instalar en un cluster de docker-compose:
         para tener los alias de los comandos de acceso al contenedor
 
     6. Ejecutar en la consola el comando:
-        - install_app
+        - install_app o install_app --redis si desea configurar redis
 
     7. Realice las configuraciones recomendadas después de ejecutar "install_app"
 
