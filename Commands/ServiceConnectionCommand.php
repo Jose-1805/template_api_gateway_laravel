@@ -16,7 +16,7 @@ class ServiceConnectionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:service-connection {name} {base_uri} {access_token} {--P|path=} {--Q|queue=} {--only_database}';
+    protected $signature = 'make:service-connection {name} {base_uri} {access_token} {--P|path=} {--Q|queue=} {--only_seeder}';
 
     /**
      * The console command description.
@@ -49,13 +49,14 @@ class ServiceConnectionCommand extends Command
      */
     public function handle()
     {
-        if($this->option('only_database')) {
+        // Ruta de almacenamiento del seeder con nombre completo
+        $path_seeder = base_path('database/seeders/services') .'/' .$this->getClassName($this->argument('name')) . 'Seeder.php';
+
+        if($this->option('only_seeder')) {
             if(Service::where('name', strtolower(Str::of($this->argument('name'))->snake()->value))->count()) {
                 $this->error('Ya existe un servicio o controlador con el nombre sugerido \''.$this->argument('name').'\'');
             } else {
-
-                $this->comment('Creando servicio en base de datos ...');
-                $this->info('Servicio creado, guarde de forma segura el siguiente token de acceso en el servicio: '.$this->addServiceToDatabase());
+                $this->makeSeeder($path_seeder);
             }
         } else {
             // Ruta de almacenamiento del servicio con nombre completo
@@ -65,23 +66,11 @@ class ServiceConnectionCommand extends Command
 
             // No existe ningún servicio o controlador con el nombre solicitado
             if (!$this->files->exists($path_service) && !$this->files->exists($path_controller) && !Service::where('name', strtolower(Str::of($this->argument('name'))->snake()->value))->count()) {
-                $this->comment('Creando controlador ...');
-                $path_stub_controller = __DIR__ . '/../../../stubs/service-controller.stub';
-                $formatter_controller = new StubFormatter(
-                    $path_controller,
-                    $this->getStubVariables(),
-                    $path_stub_controller,
-                    $this->files
-                );
-                $formatter_controller->make();
-                $this->info('Controlador creado con éxito');
+                $this->makeController($path_controller);
 
-                $this->comment('Agregando rutas ...');
                 $this->addRoute($this->getClassName($this->argument('name')) . 'Controller', $this->getRoute());
-                $this->info('Rutas agregadas con éxito');
 
-                $this->comment('Creando servicio en base de datos ...');
-                $this->info('Servicio creado, guarde de forma segura el siguiente token de acceso en el servicio: '.$this->addServiceToDatabase());
+                $this->makeSeeder($path_seeder);
             } else {
                 $this->error('Ya existe un servicio o controlador con el nombre sugerido \''.$this->argument('name').'\'');
             }
@@ -146,8 +135,11 @@ class ServiceConnectionCommand extends Command
             'CLASS_NAME' => $this->getClassName($this->argument('name')),
             'SERVICE_NAME' => $this->getServiceName($this->argument('name')),
             'CLASS_NAME_PLURAL' => Pluralizer::plural($this->getClassName($this->argument('name'))) ,
+            'BASE_URI' => $this->argument('base_uri'),
             'PATH' => $this->getPath(),
             'SERVICE_NAME_SNAKE' => Str::of($this->argument('name'))->snake()->value,
+            'ACCESS_TOKEN' => $this->argument('access_token'),
+            'QUEUE' => $this->getQueueName(),
         ];
     }
 
@@ -158,6 +150,7 @@ class ServiceConnectionCommand extends Command
      */
     public function addRoute($controller_name, $route_name)
     {
+        $this->comment('Agregando rutas ...');
         $file = fopen(base_path('routes/api.php'), 'r+') or die('Error');
         $use_is_added = false;
         $content = '';
@@ -172,21 +165,72 @@ class ServiceConnectionCommand extends Command
         rewind($file);
         fwrite($file, $content);
         fclose($file);
+        $this->info('Rutas agregadas con éxito');
+    }
+
+    public function makeController($path_controller)
+    {
+        $this->comment('Creando controlador ...');
+        $path_stub_controller = __DIR__ . '/../../../stubs/service-controller.stub';
+        $formatter_controller = new StubFormatter(
+            $path_controller,
+            $this->getStubVariables(),
+            $path_stub_controller,
+            $this->files
+        );
+        $formatter_controller->make();
+        $this->info('Controlador creado con éxito');
     }
 
     /**
-     * Agrega la información del servicio a la base de datos con token de acceso
+     * Crea un seeder para almacenar el servicio en la base de datos
+     *
+     * @return void
      */
-    public function addServiceToDatabase(): string
+    public function makeSeeder($path_seeder)
     {
-        $service = Service::create([
-            'name' => Str::of($this->argument('name'))->snake()->value,
-            'base_uri' => $this->argument('base_uri'),
-            'path' => $this->getPath(),
-            'access_token' => $this->argument('access_token'),
-            'queue' => $this->getQueueName(),
-        ]);
-        return $service->createToken('services')->plainTextToken;
+        $this->comment('Creando seeder ...');
+        $path_stub_seeder = __DIR__ . '/../../../stubs/service-seeder.stub';
+        $formatter_controller = new StubFormatter(
+            $path_seeder,
+            $this->getStubVariables(),
+            $path_stub_seeder,
+            $this->files
+        );
+        $formatter_controller->make();
+        $this->addSeederToAllServices();
+        $this->info('Seeder creado con éxito'.PHP_EOL);
+        $this->info('Para ejecutar el seeder y agregar a la base de datos ejecuta uno de los siguientes comandos:'.PHP_EOL);
+        $this->info('*  Para agregar solo este servicio');
+        $this->info('php artisan db:seed --class=Database\\Seeders\\services\\'.$this->getClassName($this->argument('name')).'Seeder');
+        $this->info('*  Para agregar todos los servicios creados');
+        $this->info('php artisan db:seed --class=Database\\Seeders\\services\\AllServices');
+    }
+
+    /**
+     * Agrega el seeder creado a un nuevo seeder encargado de ejecutar todos los seeders
+     *
+     * @return void
+     */
+    public function addSeederToAllServices()
+    {
+        $file = fopen(base_path('database/seeders/services/AllServices.php'), 'r+') or die('Error');
+        $is_added = false;
+        $content = '';
+        while ($line = fgets($file)) {
+            if (str_contains($line, $this->getClassName($this->argument('name')).'Seeder::class,') && !$is_added) {
+                $is_added = true;
+            }
+
+            if (str_contains($line, ']);') && !$is_added) {
+                $content .= '           '.$this->getClassName($this->argument('name')).'Seeder::class,'.PHP_EOL;
+                $is_added = true;
+            }
+            $content .= $line;
+        }
+        rewind($file);
+        fwrite($file, $content);
+        fclose($file);
     }
 
     /**
