@@ -21,8 +21,6 @@ class $CLASS_NAME$Controller extends Controller
     {
         $this->$SERVICE_NAME$ = Service::where('name', '$SERVICE_NAME_SNAKE$')->first();
         $this->middleware('auth:sanctum');
-        // Middleware para autenticar usuarios enviados desde otros servicios
-        $this->middleware('auth_service_user');
         //$this->middleware('permission:name')->only(['func']);
     }
 
